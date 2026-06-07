@@ -30,7 +30,7 @@ public class Game {
         public Game(){
                 map = new ArrayList<>();
                 map.add(new Room("Forest", " a leafy woodland",
-                                        Direction.NOEXIT,
+                                        Direction.NOEXIT, 
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
                                         Direction.WEST));
@@ -64,7 +64,7 @@ public class Game {
                         s = "You must enter a command.";
                 } else {
                         List<String> wl = wordList(lowstr);
-                        wl.forEach( (astr) -> System.out.println(astr) );
+                        //wl.forEach( (astr) -> System.out.println(astr) );
                         parseCommand(wl);
                 }
                 return s;
@@ -84,8 +84,6 @@ public class Game {
         }
 
         private void parseCommand(List<String> wordlist){
-
-
                 String verb;
                 String noun;
                 
@@ -117,33 +115,31 @@ public class Game {
                 Room r = aPlayer.getLocation();
                 boolean exit = false;
 
-                System.out.println(r.getName());
-                System.out.println(r.getNorth());
-                System.out.println(r.getSouth());
-                System.out.println(r.getEast());
-                System.out.println(r.getWest());
-                switch(dir) {
-                        case NORTH:
+
+               switch(dir) {
+                        case Direction.NORTH:
                                 if(r.getNorth() == Direction.NORTH){
                                         exit = true;
                                 }
                                 break;
-                        case SOUTH:
+                        case Direction.SOUTH:
                                 if(r.getSouth() == Direction.SOUTH){
                                         exit = true;
                                 }
                                 break;
-                        case EAST:
+                        case Direction.EAST:
                                 if(r.getEast() == Direction.EAST){
                                         exit = true;
+                                } else {
+                                        exit = false;
                                 }
                                 break;
-                        case WEST:
+                        case Direction.WEST:
                                 if(r.getWest() == Direction.WEST){
                                         exit = true;
                                 }
                                 break;
-                        case NOEXIT:
+                        case Direction.NOEXIT:
                                 System.out.println("That direction is not an exit");
 
                 }
@@ -171,17 +167,18 @@ public class Game {
                        case "east":
                        case "e":
                                hasExit = movePlayer(player, Direction.EAST);
+                               break;
                        case "west":
                        case "w":
                                hasExit = movePlayer(player, Direction.WEST);
-                       default:
-                               System.out.println("I don't know that direction");
+                               break;
+
                }
 
                if(hasExit){
-                       System.out.println("Yes, you can go that direction" + hasExit);
+                       System.out.println("Yes, you can go that direction" );
                } else {
-                       System.out.println("No, you cannot go that direction" + hasExit);
+                       System.out.println("No, you cannot go that direction" );
                }
 
        }
