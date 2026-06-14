@@ -29,28 +29,40 @@ public class Game {
 
         public Game(){
                 map = new ArrayList<>();
+                ThingList dungeonList = new ThingList();
+
+                dungeonList.add("ring",
+                                " a ring of great power.", 
+                                500);
+                dungeonList.add("wombat",
+                                " a cuddly wombat. It is squeaking gently in the corner.",
+                                700);
 
                 // Build map of world
                 map.add(new Room("Forest", " a leafy woodland",
                                         Direction.NOEXIT, 
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
-                                        Direction.WEST));
+                                        Direction.WEST,
+                                        new ThingList()));
                 map.add(new Room("Troll Room", " a dank room that smells of troll",
                                         Direction.NOEXIT,
                                         Direction.SOUTH,
                                         Direction.EAST,
-                                        Direction.NOEXIT));
+                                        Direction.NOEXIT,
+                                        new ThingList()));
                 map.add(new Room("Cave", " a dismal cave with walls covered in luminous moss",
                                         Direction.NORTH,
                                         Direction.NOEXIT,
                                         Direction.EAST,
-                                        Direction.NOEXIT));
+                                        Direction.NOEXIT,
+                                        new ThingList()));
                 map.add(new Room("Dungeon", " a nasty, dark cell",
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
-                                        Direction.WEST));
+                                        Direction.WEST,
+                                        dungeonList));
 
 
                 // Build room exits by room in map
@@ -62,7 +74,10 @@ public class Game {
                 map.get(3).addExit(Direction.WEST, map.get(2));
 
 
-                player = new Player("Dave", " a loveable sort", map.get(0));
+                player = new Player("Dave", 
+                                " a loveable sort", 
+                                map.get(0), 
+                                new ThingList());
 
         }
 

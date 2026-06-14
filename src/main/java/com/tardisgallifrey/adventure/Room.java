@@ -14,12 +14,15 @@ public class Room extends Thing {
 
         HashMap<Direction, Room> exits = new HashMap<>();
 
-        public Room(String name, String description, Direction north, Direction south, Direction east, Direction west){
+        ThingList roomThings;
+
+        public Room(String name, String description, Direction north, Direction south, Direction east, Direction west, ThingList tl){
                 super(name, description);
                 this.north = north;
                 this.south = south;
                 this.east = east;
                 this.west = west;
+                this.roomThings = tl;
 
         }
 
@@ -41,6 +44,10 @@ public class Room extends Thing {
 
         public void addExit(Direction dir, Room aRoom){
                 exits.put(dir, aRoom);
+        }
+
+        public ThingList getThings(){
+                return this.roomThings;
         }
 
 
