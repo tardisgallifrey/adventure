@@ -1,6 +1,8 @@
 package com.tardisgallifrey.adventure;
 
 
+import java.util.HashMap;
+
 import com.tardisgallifrey.adventure.utils.Direction;
 
 public class Room extends Thing {
@@ -9,6 +11,8 @@ public class Room extends Thing {
         Direction south;
         Direction east;
         Direction west;
+
+        HashMap<Direction, Room> exits = new HashMap<>();
 
         public Room(String name, String description, Direction north, Direction south, Direction east, Direction west){
                 super(name, description);
@@ -33,6 +37,10 @@ public class Room extends Thing {
 
         public Direction getWest(){
                 return this.west;
+        }
+
+        public void addExit(Direction dir, Room aRoom){
+                exits.put(dir, aRoom);
         }
 
 

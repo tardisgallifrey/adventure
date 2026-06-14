@@ -29,6 +29,8 @@ public class Game {
 
         public Game(){
                 map = new ArrayList<>();
+
+                // Build map of world
                 map.add(new Room("Forest", " a leafy woodland",
                                         Direction.NOEXIT, 
                                         Direction.NOEXIT,
@@ -49,6 +51,16 @@ public class Game {
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
                                         Direction.WEST));
+
+
+                // Build room exits by room in map
+                map.get(0).addExit(Direction.WEST, map.get(1));
+                map.get(1).addExit(Direction.EAST, map.get(0));
+                map.get(1).addExit(Direction.SOUTH, map.get(2));
+                map.get(2).addExit(Direction.NORTH, map.get(1));
+                map.get(2).addExit(Direction.EAST, map.get(3));
+                map.get(3).addExit(Direction.WEST, map.get(2));
+
 
                 player = new Player("Dave", " a loveable sort", map.get(0));
 
@@ -111,39 +123,43 @@ public class Game {
 
        }
 
-       private boolean movePlayer(Player aPlayer, Direction dir){
+       private void movePlayer(Player aPlayer, Direction dir){
                 Room r = aPlayer.getLocation();
-                boolean exit = false;
-
 
                switch(dir) {
                         case Direction.NORTH:
                                 if(r.getNorth() == Direction.NORTH){
-                                        exit = true;
+                                        if(r.exits.containsKey(Direction.NORTH)){
+                                                player.setLocation(r.exits.get(dir));
+                                        }
                                 }
                                 break;
                         case Direction.SOUTH:
                                 if(r.getSouth() == Direction.SOUTH){
-                                        exit = true;
+                                        if(r.exits.containsKey(Direction.SOUTH)){
+                                                player.setLocation(r.exits.get(dir));
+                                        }
                                 }
                                 break;
                         case Direction.EAST:
                                 if(r.getEast() == Direction.EAST){
-                                        exit = true;
-                                } else {
-                                        exit = false;
-                                }
+                                        if(r.exits.containsKey(Direction.EAST)){
+                                                player.setLocation(r.exits.get(dir));
+                                        }
+                                } 
                                 break;
                         case Direction.WEST:
                                 if(r.getWest() == Direction.WEST){
-                                        exit = true;
+                                        if(r.exits.containsKey(Direction.WEST)){
+                                                player.setLocation(r.exits.get(dir));
+                                        }
                                 }
                                 break;
                         case Direction.NOEXIT:
                                 System.out.println("That direction is not an exit");
 
                 }
-                return exit;
+                System.out.println("You are in the "+player.getLocation().getName());
 
        }
 
@@ -153,35 +169,31 @@ public class Game {
        }
 
        private void processMove(String verb){
-               boolean hasExit = false;
 
                switch(verb){
                        case "north":
                        case "n":
-                               hasExit = movePlayer(player, Direction.NORTH);
+                               movePlayer(player, Direction.NORTH);
                                break;
                        case "south":
                        case "s":
-                               hasExit = movePlayer(player, Direction.SOUTH);
+                               movePlayer(player, Direction.SOUTH);
                                break;
                        case "east":
                        case "e":
-                               hasExit = movePlayer(player, Direction.EAST);
+                               movePlayer(player, Direction.EAST);
                                break;
                        case "west":
                        case "w":
-                               hasExit = movePlayer(player, Direction.WEST);
+                               movePlayer(player, Direction.WEST);
                                break;
 
                }
 
-               if(hasExit){
-                       System.out.println("Yes, you can go that direction" );
-               } else {
-                       System.out.println("No, you cannot go that direction" );
-               }
+               
 
        }
+
 
 
 }

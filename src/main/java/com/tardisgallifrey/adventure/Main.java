@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 public class Main {
 
         public static void main(String[] args) throws IOException {
-                System.out.println("Welcome to the Adventure");
 
                 BufferedReader in;
                 String input;
@@ -16,6 +15,11 @@ public class Main {
                 Game game = new Game();
 
                 in = new BufferedReader(new InputStreamReader(System.in));
+
+                clearScreen();
+
+                System.out.println("Welcome to the Adventure");
+
                 do{
                         System.out.print(" >  ");
                         input = in.readLine();
@@ -29,5 +33,10 @@ public class Main {
                 }while(!"q".equals(input.toLowerCase()));
                 
 
+        }
+
+        public static void clearScreen(){
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
         }
 }
