@@ -26,7 +26,7 @@ public class Main {
                         if("q".equals(input.toLowerCase())) {
                                 System.out.println("Thanks for playing. Bye");
                         } else {
-                                System.out.println("You entered: '" + input + "'");
+                                // System.out.println("You entered: '" + input + "'");
                                 output = game.runCommand(input);
                                 System.out.println(output);
                         }

@@ -25,10 +25,5 @@ public class Player extends Thing {
                 return this.bagOfHolding;
         }
 
-        public void addThing(Thing thing){
-                bagOfHolding.add(thing);
-        }
-
-
 
 }

@@ -19,4 +19,8 @@ public class Thing {
                 return this.description;
         }
 
+        public String describe(){
+                return this.description;
+        }
+
 }

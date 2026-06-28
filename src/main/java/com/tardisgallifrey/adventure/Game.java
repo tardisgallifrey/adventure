@@ -19,45 +19,57 @@ public class Game {
                                         "east",
                                         "e",
                                         "west",
-                                        "w"
+                                        "w",
+                                        "look"
                                         ));
+        
         List<String> objects = new ArrayList<>(Arrays.asList("sword",
                                         "ring",
-                                        "snake"
+                                        "snake",
+                                        "around"
                                         ));
 
 
         public Game(){
                 map = new ArrayList<>();
+                ThingList forestList = new ThingList();
+                ThingList trollList = new ThingList();
+                ThingList caveList = new ThingList();
                 ThingList dungeonList = new ThingList();
+                dungeonList.add(new Treasure("a ring", " of great power", 600));
+                dungeonList.add(new Treasure("a wombat", " a cuddly, furry wombat in the corner squeaking to itself", 700));
 
-                dungeonList.add("ring",
-                                " a ring of great power.", 
-                                500);
-                dungeonList.add("wombat",
-                                " a cuddly wombat. It is squeaking gently in the corner.",
-                                700);
+                forestList.add(new Treasure("a sword", " a decent short sword", 300));
+                forestList.add(new Treasure("a bow" , " a fine sturdy warrior bow", 300));
+                forestList.add(new Treasure("a quiver of arrows", " sharp pointy arrows", 100));
+
+                trollList.add(new Treasure("a suit of armor", " worthy chain mail armor", 1100));
+                trollList.add(new Treasure("a large ruby", " a fine bright red gem", 400));
+
+                caveList.add(new Treasure("a helm", " a heavy lidded helm", 980));
+                caveList.add(new Treasure("a long sword", " a long, gem studded, very sharp sword", 1200));
+                caveList.add(new Treasure("a large diamond", " a very precious carved diamond", 10000));
 
                 // Build map of world
-                map.add(new Room("Forest", " a leafy woodland",
+                map.add(new Room("the Forest", "a leafy woodland",
                                         Direction.NOEXIT, 
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
                                         Direction.WEST,
-                                        new ThingList()));
-                map.add(new Room("Troll Room", " a dank room that smells of troll",
+                                        forestList));
+                map.add(new Room("a Troll's Room", "a dank room that smells of troll",
                                         Direction.NOEXIT,
                                         Direction.SOUTH,
                                         Direction.EAST,
                                         Direction.NOEXIT,
-                                        new ThingList()));
-                map.add(new Room("Cave", " a dismal cave with walls covered in luminous moss",
+                                        trollList));
+                map.add(new Room("a Cave", "a dismal cave with walls covered in luminous moss",
                                         Direction.NORTH,
                                         Direction.NOEXIT,
                                         Direction.EAST,
                                         Direction.NOEXIT,
-                                        new ThingList()));
-                map.add(new Room("Dungeon", " a nasty, dark cell",
+                                        caveList));
+                map.add(new Room("a Dungeon", "a nasty, dark cell",
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
@@ -74,10 +86,11 @@ public class Game {
                 map.get(3).addExit(Direction.WEST, map.get(2));
 
 
+                ThingList playerBag = new ThingList();
                 player = new Player("Dave", 
                                 " a loveable sort", 
                                 map.get(0), 
-                                new ThingList());
+                                playerBag);
 
         }
 
@@ -119,7 +132,7 @@ public class Game {
                 } else if( wordlist.size() == 1){
                         verb = wordlist.get(0);
                         if(!commands.contains(verb)){
-                                System.out.println(verb + " is not a know verb");
+                                System.out.println(verb + " is not a known verb");
                         } else {
                                 processMove(verb);
                         }
@@ -174,12 +187,16 @@ public class Game {
                                 System.out.println("That direction is not an exit");
 
                 }
-                System.out.println("You are in the "+player.getLocation().getName());
+                System.out.println(player.getLocation().describe());
 
        }
 
        private void processCommand(String verb, String noun){
-                
+               switch(verb){
+                        case "look"->System.out.println(player.getLocation().describe());
+                        default->System.out.println("I didn't understand that request.");
+
+               }
 
        }
 
@@ -210,5 +227,10 @@ public class Game {
        }
 
 
+       private void describe(Room aRoom){
+               System.out.printf("%s\n", aRoom.roomThings.get(0).getName());
+
+       
+       }
 
 }

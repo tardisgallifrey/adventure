@@ -50,5 +50,16 @@ public class Room extends Thing {
                 return this.roomThings;
         }
 
+        @Override
+        public String describe(){
+                String s = "";
+                if( roomThings.size() > 0 ){
+                        s = "You are in " + this.getName() + "\n\t" + "It is " + this.getDescription();
+                } else {
+                        s = "You are in " + this.getName() + "\n\t" + "It is " + this.getDescription() + "\nThere is nothing here.";
+                }
+                return s;
+        }
+
 
 }
