@@ -107,7 +107,7 @@ public class Game {
                         //wl.forEach( (astr) -> System.out.println(astr) );
                         parseCommand(wl);
                 }
-                return s;
+                return "Status: " + s;
         }
 
         private List<String> wordList(String input){
@@ -160,6 +160,8 @@ public class Game {
                                         if(r.exits.containsKey(Direction.NORTH)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
+                                } else {
+                                        System.out.println("Not an exit.");
                                 }
                                 break;
                         case Direction.SOUTH:
@@ -167,6 +169,8 @@ public class Game {
                                         if(r.exits.containsKey(Direction.SOUTH)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
+                                } else {
+                                        System.out.println("Not an exit.");
                                 }
                                 break;
                         case Direction.EAST:
@@ -174,19 +178,24 @@ public class Game {
                                         if(r.exits.containsKey(Direction.EAST)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
-                                } 
+                                } else {
+                                        System.out.println("Not an exit.");
+                                }
                                 break;
                         case Direction.WEST:
                                 if(r.getWest() == Direction.WEST){
                                         if(r.exits.containsKey(Direction.WEST)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
+                                } else {
+                                        System.out.println("Not an exit.");
                                 }
                                 break;
-                        case Direction.NOEXIT:
+                        case Direction.NOEXIT:  // technically can't be reached, leaving for now.
                                 System.out.println("That direction is not an exit");
 
                 }
+                // reaching a non exit will still describe the room.  That's OK.
                 System.out.println(player.getLocation().describe());
 
        }
@@ -227,10 +236,5 @@ public class Game {
        }
 
 
-       private void describe(Room aRoom){
-               System.out.printf("%s\n", aRoom.roomThings.get(0).getName());
-
-       
-       }
 
 }

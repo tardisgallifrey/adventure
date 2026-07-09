@@ -52,13 +52,18 @@ public class Room extends Thing {
 
         @Override
         public String describe(){
-                String s = "";
+                StringBuilder s = new StringBuilder();
                 if( roomThings.size() > 0 ){
-                        s = "You are in " + this.getName() + "\n\t" + "It is " + this.getDescription();
+                        s.append("You are in " + this.getName() + "\n\t" + "It is " + this.getDescription());
+                        s.append("\n  This room contains: \n");
+                        for( Thing thing : roomThings ){
+                                s.append("\n\t\t" + thing.describe());
+                        }
+
                 } else {
-                        s = "You are in " + this.getName() + "\n\t" + "It is " + this.getDescription() + "\nThere is nothing here.";
+                        s.append("You are in " + this.getName() + "\n\t" + "It is " + this.getDescription() + "\nThere is nothing here.");
                 }
-                return s;
+                return s.toString();
         }
 
 

@@ -20,7 +20,7 @@ public class Thing {
         }
 
         public String describe(){
-                return this.description;
+                return " Here is " + this.getName() + ": It is" +  this.description;
         }
 
 }
