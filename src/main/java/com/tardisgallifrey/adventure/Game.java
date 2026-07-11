@@ -20,14 +20,29 @@ public class Game {
                                         "e",
                                         "west",
                                         "w",
-                                        "look"
+                                        "look",
+                                        "l",
+                                        "save",
+                                        "load",
+                                        "take"
                                         ));
         
         List<String> objects = new ArrayList<>(Arrays.asList("sword",
                                         "ring",
                                         "snake",
-                                        "around"
+                                        "around",
+                                        "bow",
+                                        "quiver",
+                                        "armor",
+                                        "helm",
+                                        "wombat"
                                         ));
+
+
+        // The above needs a better method.  
+        // It should walk through the room lists and add things 
+        // to the object list.
+
 
 
         public Game(){
@@ -36,19 +51,19 @@ public class Game {
                 ThingList trollList = new ThingList();
                 ThingList caveList = new ThingList();
                 ThingList dungeonList = new ThingList();
-                dungeonList.add(new Treasure("a ring", " of great power", 600));
-                dungeonList.add(new Treasure("a wombat", " a cuddly, furry wombat in the corner squeaking to itself", 700));
+                dungeonList.add(new Treasure("ring", " a ring of great power", 600));
+                dungeonList.add(new Thing("wombat", " a cuddly, furry wombat in the corner squeaking to itself"));
 
-                forestList.add(new Treasure("a sword", " a decent short sword", 300));
-                forestList.add(new Treasure("a bow" , " a fine sturdy warrior bow", 300));
-                forestList.add(new Treasure("a quiver of arrows", " sharp pointy arrows", 100));
+                forestList.add(new Treasure("sword", " a decent short sword", 300));
+                forestList.add(new Treasure("bow" , " a fine sturdy warrior bow", 300));
+                forestList.add(new Treasure("quiver", " full of sharp pointy arrows", 100));
 
-                trollList.add(new Treasure("a suit of armor", " worthy chain mail armor", 1100));
-                trollList.add(new Treasure("a large ruby", " a fine bright red gem", 400));
+                trollList.add(new Treasure("armor", " a suit of worthy chain mail armor", 1100));
+                trollList.add(new Treasure("ruby", " a fine bright red gem", 400));
 
-                caveList.add(new Treasure("a helm", " a heavy lidded helm", 980));
-                caveList.add(new Treasure("a long sword", " a long, gem studded, very sharp sword", 1200));
-                caveList.add(new Treasure("a large diamond", " a very precious carved diamond", 10000));
+                caveList.add(new Treasure("helm", " a heavy lidded helm", 980));
+                caveList.add(new Treasure("longsword", " a long, gem studded, very sharp sword", 1200));
+                caveList.add(new Treasure("diamond", " a very precious carved diamond", 10000));
 
                 // Build map of world
                 map.add(new Room("the Forest", "a leafy woodland",
@@ -203,10 +218,43 @@ public class Game {
        private void processCommand(String verb, String noun){
                switch(verb){
                         case "look"->System.out.println(player.getLocation().describe());
+                        case "take"->takeObject(noun);
+                        case "drop"->dropObject(noun);
                         default->System.out.println("I didn't understand that request.");
 
                }
 
+       }
+
+       private void takeObject( String object ){
+               String retStr = "";
+               Thing t = player.getLocation().getThings().thisObj(object);
+
+               if( object.equals("") ){
+                       object = "nameless object"; // if no object specified
+               }
+
+               if( t == null ) {
+                       retStr = "There is no " + object + " here.";
+                } else {
+                        retStr = "Picking up " + t.getName();
+                }
+
+               System.out.println(retStr);
+       }
+
+       private void dropObject( String object ){
+               String retStr = "";
+
+               Thing t = player.getBag().thisObj( object );
+
+               if( t == null ) {
+                       retStr = "You haven't got one of those.";
+               } else {
+                       retStr = "Dropping " + t.getName();
+               }
+
+               System.out.println(retStr);
        }
 
        private void processMove(String verb){

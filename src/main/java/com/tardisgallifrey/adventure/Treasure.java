@@ -13,4 +13,11 @@ public class Treasure extends Thing {
         public int getValue(){
                 return this.value;
         }
+
+        @Override
+        public String describe(){
+                return " Here is " + this.getName() + ": It is" +  this.getDescription() + ". It's value is: " + this.getValue();
+        }
+
+
 }
