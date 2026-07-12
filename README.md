@@ -6,3 +6,8 @@ Right now, the player can move from room to room and back.  I added a `HashMap<D
 
 Currently working on Treasures and a Bag of Holding.
 
+##  Update for July
+
+The game now has a map and the player can move from room to room and back.  In each room, the player will get a description of items in the room.  None are hidden.  The player can pick up and drop any items they can see.  Next, will be an inventory listing command for the player's Bag Of Holding.  Then onward to saving and loading games.
+
+

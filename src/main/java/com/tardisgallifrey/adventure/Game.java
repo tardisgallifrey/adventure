@@ -120,7 +120,7 @@ public class Game {
                 } else {
                         List<String> wl = wordList(lowstr);
                         //wl.forEach( (astr) -> System.out.println(astr) );
-                        parseCommand(wl);
+                        s = parseCommand(wl);
                 }
                 return "Status: " + s;
         }
@@ -138,35 +138,37 @@ public class Game {
                  return stringList;
         }
 
-        private void parseCommand(List<String> wordlist){
+        private String parseCommand(List<String> wordlist){
                 String verb;
                 String noun;
+                String msg = "Something is not quite right.\n";
                 
                 if(wordlist.size() > 2){
-                        System.out.println("Only 2 word commands allowed");
+                        msg = "Only 2 word commands allowed";
                 } else if( wordlist.size() == 1){
                         verb = wordlist.get(0);
                         if(!commands.contains(verb)){
-                                System.out.println(verb + " is not a known verb");
+                                msg = verb + " is not a known verb";
                         } else {
-                                processMove(verb);
+                                msg = processMove(verb);
                         }
 
                 } else {
                         verb = wordlist.get(0);
                         noun = wordlist.get(1);
                         if(!commands.contains(verb)){
-                                System.out.println(verb + " is not a known verb");
+                                msg = verb + " is not a known verb";
                         } else {
-                                processCommand(verb, noun);
+                                msg = processCommand(verb, noun);
                         }
                                          
                 }
+                return msg;
         
 
        }
 
-       private void movePlayer(Player aPlayer, Direction dir){
+       private String movePlayer(Player aPlayer, Direction dir){
                 Room r = aPlayer.getLocation();
 
                switch(dir) {
@@ -176,7 +178,7 @@ public class Game {
                                                 player.setLocation(r.exits.get(dir));
                                         }
                                 } else {
-                                        System.out.println("Not an exit.");
+                                        return "Not an exit.";
                                 }
                                 break;
                         case Direction.SOUTH:
@@ -185,7 +187,7 @@ public class Game {
                                                 player.setLocation(r.exits.get(dir));
                                         }
                                 } else {
-                                        System.out.println("Not an exit.");
+                                        return "Not an exit.";
                                 }
                                 break;
                         case Direction.EAST:
@@ -194,7 +196,7 @@ public class Game {
                                                 player.setLocation(r.exits.get(dir));
                                         }
                                 } else {
-                                        System.out.println("Not an exit.");
+                                        return "Not an exit.";
                                 }
                                 break;
                         case Direction.WEST:
@@ -203,30 +205,32 @@ public class Game {
                                                 player.setLocation(r.exits.get(dir));
                                         }
                                 } else {
-                                        System.out.println("Not an exit.");
+                                        return "Not an exit.";
                                 }
                                 break;
                         case Direction.NOEXIT:  // technically can't be reached, leaving for now.
-                                System.out.println("That direction is not an exit");
+                                return "That direction is not an exit";
 
                 }
-                // reaching a non exit will still describe the room.  That's OK.
-                System.out.println(player.getLocation().describe());
+                return player.getLocation().describe();
 
        }
 
-       private void processCommand(String verb, String noun){
+       private String processCommand(String verb, String noun){
+               String msg = "Command failed\n";
+
                switch(verb){
-                        case "look"->System.out.println(player.getLocation().describe());
-                        case "take"->takeObject(noun);
-                        case "drop"->dropObject(noun);
-                        default->System.out.println("I didn't understand that request.");
+                        case "look"-> { msg = player.getLocation().describe(); }
+                        case "take"-> { msg = takeObject(noun); }
+                        case "drop"-> { msg = dropObject(noun); }    
+                        default-> msg = "I didn't understand that request.";
 
                }
+               return msg;
 
        }
 
-       private void takeObject( String object ){
+       private String takeObject( String object ){
                String retStr = "";
                Thing t = player.getLocation().getThings().thisObj(object);
 
@@ -237,13 +241,13 @@ public class Game {
                if( t == null ) {
                        retStr = "There is no " + object + " here.";
                 } else {
-                        retStr = "Picking up " + t.getName();
+                        transferObj( t, player.getLocation().getThings(), player.getBag() );
+                        retStr = t.getName() + " taken\n";
                 }
-
-               System.out.println(retStr);
+                return retStr;
        }
 
-       private void dropObject( String object ){
+       private String dropObject( String object ){
                String retStr = "";
 
                Thing t = player.getBag().thisObj( object );
@@ -251,33 +255,43 @@ public class Game {
                if( t == null ) {
                        retStr = "You haven't got one of those.";
                } else {
+                       transferObj( t, player.getBag(), player.getLocation().getThings() );
                        retStr = "Dropping " + t.getName();
                }
 
-               System.out.println(retStr);
+               return retStr;
        }
 
-       private void processMove(String verb){
+       private void transferObj( Thing t, ThingList  fromList, ThingList  toList ) {
+
+               fromList.remove(t);
+               toList.add(t);
+
+       }
+
+       private String processMove(String verb){
+               String msg = "something failed\n";
 
                switch(verb){
                        case "north":
                        case "n":
-                               movePlayer(player, Direction.NORTH);
+                               msg = movePlayer(player, Direction.NORTH);
                                break;
                        case "south":
                        case "s":
-                               movePlayer(player, Direction.SOUTH);
+                               msg = movePlayer(player, Direction.SOUTH);
                                break;
                        case "east":
                        case "e":
-                               movePlayer(player, Direction.EAST);
+                               msg = movePlayer(player, Direction.EAST);
                                break;
                        case "west":
                        case "w":
-                               movePlayer(player, Direction.WEST);
+                               msg = movePlayer(player, Direction.WEST);
                                break;
 
                }
+               return msg;
 
                
 
