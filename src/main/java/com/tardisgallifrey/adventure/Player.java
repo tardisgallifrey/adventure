@@ -25,5 +25,22 @@ public class Player extends Thing {
                 return this.bagOfHolding;
         }
 
+        public String showInventory(){
+                StringBuilder s = new StringBuilder();
+                if( this.bagOfHolding.size() > 0 ){
+                        s.append("\n  Your bag of Holding contains: \n");
+                        for( Thing thing : this.bagOfHolding ){
+                                s.append("\n\t\t" + thing.describe());
+                        }
+
+                } else {
+                        s.append("Your bag is empty.  Find some stuff.");
+                }
+                return s.toString();
+        }
+
+
+
+
 
 }

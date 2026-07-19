@@ -4,3 +4,8 @@
 7/12/26
     -- finished takeObj and dropObj.  Wrote transferObj.  Fixed architecture to ensure that all methods produce messages that return up the logic tree so that the Main method owns all message output.  
 
+7/19/26
+    -- added inventory feature to game and filled out showInventory() player method
+    -- refactored runCommand(), processMove(), and processCommand() to allow for smoother command lookups and more flexible wording for player.
+
+ 

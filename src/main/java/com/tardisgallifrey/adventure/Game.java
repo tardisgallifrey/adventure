@@ -12,6 +12,7 @@ public class Game {
         private Player player;
         List<String> commands = new ArrayList<>(Arrays.asList("take",
                                         "drop",
+                                        "d",
                                         "north",
                                         "n",
                                         "south",
@@ -22,22 +23,14 @@ public class Game {
                                         "w",
                                         "look",
                                         "l",
+                                        "inventory",
+                                        "i",
                                         "save",
                                         "load",
-                                        "take"
+                                        "take",
+                                        "t"
                                         ));
         
-        List<String> objects = new ArrayList<>(Arrays.asList("sword",
-                                        "ring",
-                                        "snake",
-                                        "around",
-                                        "bow",
-                                        "quiver",
-                                        "armor",
-                                        "helm",
-                                        "wombat"
-                                        ));
-
 
         // The above needs a better method.  
         // It should walk through the room lists and add things 
@@ -119,7 +112,7 @@ public class Game {
                         s = "You must enter a command.";
                 } else {
                         List<String> wl = wordList(lowstr);
-                        //wl.forEach( (astr) -> System.out.println(astr) );
+                        // wl.forEach( (astr) -> System.out.println(astr) );
                         s = parseCommand(wl);
                 }
                 return "Status: " + s;
@@ -139,30 +132,24 @@ public class Game {
         }
 
         private String parseCommand(List<String> wordlist){
-                String verb;
-                String noun;
+                String verb = "";
+                String noun = "";
                 String msg = "Something is not quite right.\n";
-                
-                if(wordlist.size() > 2){
-                        msg = "Only 2 word commands allowed";
-                } else if( wordlist.size() == 1){
-                        verb = wordlist.get(0);
-                        if(!commands.contains(verb)){
-                                msg = verb + " is not a known verb";
-                        } else {
-                                msg = processMove(verb);
-                        }
 
-                } else {
-                        verb = wordlist.get(0);
-                        noun = wordlist.get(1);
-                        if(!commands.contains(verb)){
-                                msg = verb + " is not a known verb";
-                        } else {
-                                msg = processCommand(verb, noun);
+                if( wordlist.size() > 0 ) {
+                        verb = wordlist.get( 0 );
+                        if( wordlist.size() > 1 ) {
+                                noun = wordlist.get( 1 );
                         }
-                                         
                 }
+
+                if( commands.contains( verb ) ) {
+                        msg = processCommand( verb, noun );
+                } else {
+                        msg = verb + " is not a known verb.";
+                }
+                
+                
                 return msg;
         
 
@@ -172,7 +159,7 @@ public class Game {
                 Room r = aPlayer.getLocation();
 
                switch(dir) {
-                        case Direction.NORTH:
+                        case Direction.NORTH -> {
                                 if(r.getNorth() == Direction.NORTH){
                                         if(r.exits.containsKey(Direction.NORTH)){
                                                 player.setLocation(r.exits.get(dir));
@@ -180,8 +167,8 @@ public class Game {
                                 } else {
                                         return "Not an exit.";
                                 }
-                                break;
-                        case Direction.SOUTH:
+                        }
+                        case Direction.SOUTH -> {
                                 if(r.getSouth() == Direction.SOUTH){
                                         if(r.exits.containsKey(Direction.SOUTH)){
                                                 player.setLocation(r.exits.get(dir));
@@ -189,8 +176,8 @@ public class Game {
                                 } else {
                                         return "Not an exit.";
                                 }
-                                break;
-                        case Direction.EAST:
+                        }
+                        case Direction.EAST -> {
                                 if(r.getEast() == Direction.EAST){
                                         if(r.exits.containsKey(Direction.EAST)){
                                                 player.setLocation(r.exits.get(dir));
@@ -198,8 +185,8 @@ public class Game {
                                 } else {
                                         return "Not an exit.";
                                 }
-                                break;
-                        case Direction.WEST:
+                        }
+                        case Direction.WEST -> {
                                 if(r.getWest() == Direction.WEST){
                                         if(r.exits.containsKey(Direction.WEST)){
                                                 player.setLocation(r.exits.get(dir));
@@ -207,9 +194,8 @@ public class Game {
                                 } else {
                                         return "Not an exit.";
                                 }
-                                break;
-                        case Direction.NOEXIT:  // technically can't be reached, leaving for now.
-                                return "That direction is not an exit";
+                        }
+                        case Direction.NOEXIT -> { return "That direction is not an exit"; }
 
                 }
                 return player.getLocation().describe();
@@ -220,9 +206,12 @@ public class Game {
                String msg = "Command failed\n";
 
                switch(verb){
-                        case "look"-> { msg = player.getLocation().describe(); }
-                        case "take"-> { msg = takeObject(noun); }
-                        case "drop"-> { msg = dropObject(noun); }    
+                        case "l", "look"-> { msg = player.getLocation().describe(); }
+                        case "t", "take"-> { msg = takeObject(noun); }
+                        case "d", "drop"-> { msg = dropObject(noun); }    
+                        case "i", "inventory" -> { msg = player.showInventory(); } 
+                        case "n", "s", "e", "w" -> { msg = processMove( verb ); } 
+                        case "north", "south", "east", "west" -> { msg = processMove( verb ); } 
                         default-> msg = "I didn't understand that request.";
 
                }
@@ -269,26 +258,16 @@ public class Game {
 
        }
 
+
+
        private String processMove(String verb){
                String msg = "something failed\n";
 
                switch(verb){
-                       case "north":
-                       case "n":
-                               msg = movePlayer(player, Direction.NORTH);
-                               break;
-                       case "south":
-                       case "s":
-                               msg = movePlayer(player, Direction.SOUTH);
-                               break;
-                       case "east":
-                       case "e":
-                               msg = movePlayer(player, Direction.EAST);
-                               break;
-                       case "west":
-                       case "w":
-                               msg = movePlayer(player, Direction.WEST);
-                               break;
+                       case "n", "north" -> { msg = movePlayer(player, Direction.NORTH); }
+                       case "s", "south" -> { msg = movePlayer(player, Direction.SOUTH); }
+                       case "e", "east" -> { msg = movePlayer(player, Direction.EAST); }
+                       case "w", "west" -> { msg = movePlayer(player, Direction.WEST); }
 
                }
                return msg;

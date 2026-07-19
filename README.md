@@ -10,4 +10,12 @@ Currently working on Treasures and a Bag of Holding.
 
 The game now has a map and the player can move from room to room and back.  In each room, the player will get a description of items in the room.  None are hidden.  The player can pick up and drop any items they can see.  Next, will be an inventory listing command for the player's Bag Of Holding.  Then onward to saving and loading games.
 
+I have cleaned up the game process with reduction in code and allow better/flexible command wording.
+
+Added player bagOfHolding showInventory feature.
+
+At this point, the game will show room features (items), move from room to room, take items, drop items, and show player inventory.
+
+Next, before moving on, I need to initiate a hint() method.  
+
 
