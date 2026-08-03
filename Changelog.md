@@ -10,6 +10,8 @@
 
 8/3/26
     -- added save and load features.
+    -- added simple hint
+    
 
 
  

@@ -35,7 +35,9 @@ public class Game implements Serializable{
                                         "ld",
                                         "load",
                                         "take",
-                                        "t"
+                                        "t",
+                                        "h",
+                                        "hint"
                                         ));
         
 
@@ -221,6 +223,7 @@ public class Game implements Serializable{
                         case "north", "south", "east", "west" -> { msg = processMove( verb ); } 
                         case "sv", "save" -> { msg = saveGame( );   }
                         case "ld", "load" -> { msg = loadGame(  );  } 
+                        case "h", "hint" -> { msg = hint(  ); } 
                         default-> msg = "I didn't understand that request.";
 
                }
@@ -320,6 +323,12 @@ public class Game implements Serializable{
                        msg = "Serialization error! Can't load data.\n"+
                                e.getClass(  ) + ": " + e.getMessage(  );  
                }
+
+               return msg;
+       }
+
+       private String hint(  ){
+               String msg = "Try using north, south, east, or west\n";
 
                return msg;
        }
