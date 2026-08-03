@@ -18,4 +18,6 @@ At this point, the game will show room features (items), move from room to room,
 
 Next, before moving on, I need to initiate a hint() method.  
 
+The game now has a save and load feature, which only saves the current game, not multiple games.
+
 

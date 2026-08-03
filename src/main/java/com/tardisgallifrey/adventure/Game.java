@@ -1,12 +1,17 @@
 package com.tardisgallifrey.adventure;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import com.tardisgallifrey.adventure.utils.Direction;
 
-public class Game {
+public class Game implements Serializable{
 
         private ArrayList<Room> map;
         private Player player;
@@ -25,7 +30,9 @@ public class Game {
                                         "l",
                                         "inventory",
                                         "i",
+                                        "sv",
                                         "save",
+                                        "ld",
                                         "load",
                                         "take",
                                         "t"
@@ -212,6 +219,8 @@ public class Game {
                         case "i", "inventory" -> { msg = player.showInventory(); } 
                         case "n", "s", "e", "w" -> { msg = processMove( verb ); } 
                         case "north", "south", "east", "west" -> { msg = processMove( verb ); } 
+                        case "sv", "save" -> { msg = saveGame( );   }
+                        case "ld", "load" -> { msg = loadGame(  );  } 
                         default-> msg = "I didn't understand that request.";
 
                }
@@ -274,6 +283,45 @@ public class Game {
 
                
 
+       }
+
+       private String saveGame( ){
+               String msg = "Saving Game";
+
+               try {
+                       FileOutputStream fos = new FileOutputStream("./Adv.sav");
+                       ObjectOutputStream oos = new ObjectOutputStream(fos);
+                       oos.writeObject( this );
+                       oos.flush(  );
+                       oos.close(  );
+                       msg = "Game Saved";
+               } catch (Exception e) {
+                       msg = "Serialization error! Can't save data.\n"+
+                               e.getClass(  ) + ": " + e.getMessage(  ) + "\n";  
+               }
+
+                return msg;
+       }
+
+       private String loadGame(  ){
+               String msg = "Loading Game";
+
+
+               try {
+                       FileInputStream fis = new FileInputStream("./Adv.sav");
+                       ObjectInputStream ois = new ObjectInputStream( fis );
+                       Game loaded = ( Game ) ois.readObject(  );
+                       this.map = loaded.map;
+                       this.player = loaded.player;
+                       this.commands = loaded.commands;
+                       ois.close(  );
+                       msg = "\n---Game Loaded---\n";
+               } catch (Exception e) {
+                       msg = "Serialization error! Can't load data.\n"+
+                               e.getClass(  ) + ": " + e.getMessage(  );  
+               }
+
+               return msg;
        }
 
 

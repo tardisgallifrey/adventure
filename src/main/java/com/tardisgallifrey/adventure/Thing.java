@@ -1,6 +1,8 @@
 package com.tardisgallifrey.adventure;
 
-public class Thing {
+import java.io.Serializable;
+
+public class Thing implements Serializable{
 
         private String name;
         private String description;

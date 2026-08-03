@@ -1,7 +1,6 @@
 package com.tardisgallifrey.adventure;
 
 
-
 public class Player extends Thing {
 
         private Room location;
