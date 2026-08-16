@@ -41,6 +41,17 @@ tasks.named<Jar>("jar"){
     }
 }
 
+tasks.register<Copy>( "copyJarToRoot" ){
+        dependsOn( tasks.named( "jar" )  )
+        from( layout.buildDirectory.dir( "libs" )  )
+        include( "adventure.jar" )
+        into( layout.projectDirectory )
+}
+
+tasks.named( "build" ){
+        finalizedBy( "copyJarToRoot" )
+}
+
 dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.25.2")
     implementation("com.ironsoftware:ironpdf:2025.11.12")
