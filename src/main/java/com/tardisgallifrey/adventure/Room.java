@@ -17,7 +17,7 @@ public class Room extends Thing {
         ThingList roomThings;
 
         public Room(String name, String description, Direction north, Direction south, Direction east, Direction west, ThingList tl){
-                super(name, description);
+                super(name, description, false, false);
                 this.north = north;
                 this.south = south;
                 this.east = east;

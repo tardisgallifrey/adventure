@@ -7,7 +7,7 @@ public class Player extends Thing {
         private ThingList bagOfHolding;
 
         public Player(String name, String description, Room aRoom, ThingList tl){
-                super(name, description);
+                super(name, description, false, false);
                 this.location = aRoom;
                 this.bagOfHolding = tl;
         }

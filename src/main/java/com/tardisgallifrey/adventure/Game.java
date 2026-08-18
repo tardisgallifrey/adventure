@@ -54,7 +54,7 @@ public class Game implements Serializable{
                 ThingList caveList = new ThingList();
                 ThingList dungeonList = new ThingList();
                 dungeonList.add(new Treasure("ring", " a ring of great power", 600));
-                dungeonList.add(new Thing("wombat", " a cuddly, furry wombat in the corner squeaking to itself"));
+                dungeonList.add(new Thing("wombat", " a cuddly, furry wombat in the corner squeaking to itself", false, true));
 
                 forestList.add(new Treasure("sword", " a decent short sword", 300));
                 forestList.add(new Treasure("bow" , " a fine sturdy warrior bow", 300));
@@ -241,9 +241,13 @@ public class Game implements Serializable{
 
                if( t == null ) {
                        retStr = "There is no " + object + " here.";
-                } else {
+               }
+
+                if( t.getTakable() ) {
                         transferObj( t, player.getLocation().getThings(), player.getBag() );
                         retStr = t.getName() + " taken\n";
+                } else {
+                        retStr = "You cannot take " + t.getName();
                 }
                 return retStr;
        }
