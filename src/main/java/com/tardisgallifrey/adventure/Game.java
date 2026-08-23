@@ -37,7 +37,9 @@ public class Game implements Serializable{
                                         "take",
                                         "t",
                                         "h",
-                                        "hint"
+                                        "hint",
+                                        "o",
+                                        "open"
                                         ));
         
 
@@ -48,6 +50,11 @@ public class Game implements Serializable{
 
 
         public Game(){
+
+                ThingList chest_inventory = new ThingList(  );
+                chest_inventory.add( new Thing( "key", " it opens something", true, true) );
+                chest_inventory.add( new Thing( "jacket", " a warm leather jacket", true, true ) ); 
+                ContainerThing chestWood = new ContainerThing( "chest", " a wooden chest", chest_inventory, false, false, true, false);
                 map = new ArrayList<>();
                 ThingList forestList = new ThingList();
                 ThingList trollList = new ThingList();
@@ -62,6 +69,7 @@ public class Game implements Serializable{
 
                 trollList.add(new Treasure("armor", " a suit of worthy chain mail armor", 1100));
                 trollList.add(new Treasure("ruby", " a fine bright red gem", 400));
+                trollList.add( chestWood ); 
 
                 caveList.add(new Treasure("helm", " a heavy lidded helm", 980));
                 caveList.add(new Treasure("longsword", " a long, gem studded, very sharp sword", 1200));
@@ -224,11 +232,32 @@ public class Game implements Serializable{
                         case "sv", "save" -> { msg = saveGame( );   }
                         case "ld", "load" -> { msg = loadGame(  );  } 
                         case "h", "hint" -> { msg = hint(  ); } 
+                        case "o", "open" -> { msg = openObject( noun ); }
                         default-> msg = "I didn't understand that request.";
 
                }
                return msg;
 
+       }
+
+       private String openObject( String object ){
+               String retStr = "";
+               Thing t = player.getLocation().getThings().thisObj( object );
+
+               if( t instanceof ContainerThing ){
+                        ContainerThing container = ( ContainerThing ) t;
+                        if( container.isOpenable( )  ){
+                                container.open( );
+                                retStr = "You opened the " + container.getName( ) + ".\n";
+                                System.out.println( container.showInventory() );
+                        } else {
+                                retStr = "You didn't open the " + container.getName( ) + ".\n";
+                        }
+               } else {
+                       retStr = t.getName( ) + " is not able to be opened.\n";
+               }
+
+                return retStr;
        }
 
        private String takeObject( String object ){

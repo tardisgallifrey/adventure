@@ -6,6 +6,8 @@ public enum Direction{
         SOUTH,
         EAST,  
         WEST,  
+        UP,
+        DOWN,
         NOEXIT; 
 
 }

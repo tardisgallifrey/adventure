@@ -11,6 +11,8 @@ public class Room extends Thing {
         Direction south;
         Direction east;
         Direction west;
+        Direction up;
+        Direction down;
 
         HashMap<Direction, Room> exits = new HashMap<>();
 
