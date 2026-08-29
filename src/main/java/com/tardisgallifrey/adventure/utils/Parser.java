@@ -62,8 +62,7 @@ public class Parser{
                         }
                 }
 
-                if( commands.contains( verb ) ) {
-                } else {
+                if( !commands.contains( verb ) ) {
                         verb += " is not a known verb.";
                 }
                 

@@ -17,6 +17,8 @@
 8/29/26
     -- refactored from processCommand( verb, noun ) to processCommand( CmdObj command )
     -- added CmdObj object to pass verb noun ( and future words ) 
+    -- fixed takeObject to return immediately upon null value in t object
+
     
 
 
