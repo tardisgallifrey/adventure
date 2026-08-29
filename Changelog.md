@@ -11,6 +11,12 @@
 8/3/26
     -- added save and load features.
     -- added simple hint
+8/23/26
+    -- added ContainerThing for chests, sacks
+    -- added open verb
+8/29/26
+    -- refactored from processCommand( verb, noun ) to processCommand( CmdObj command )
+    -- added CmdObj object to pass verb noun ( and future words ) 
     
 
 
