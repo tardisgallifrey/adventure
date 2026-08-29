@@ -6,49 +6,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 import com.tardisgallifrey.adventure.utils.Direction;
+import com.tardisgallifrey.adventure.utils.CmdObj;
+import com.tardisgallifrey.adventure.utils.Parser;
 
 public class Game implements Serializable{
 
+        CmdObj cmd; 
         private ArrayList<Room> map;
         private Player player;
-        List<String> commands = new ArrayList<>(Arrays.asList("take",
-                                        "drop",
-                                        "d",
-                                        "north",
-                                        "n",
-                                        "south",
-                                        "s",
-                                        "east",
-                                        "e",
-                                        "west",
-                                        "w",
-                                        "look",
-                                        "l",
-                                        "inventory",
-                                        "i",
-                                        "sv",
-                                        "save",
-                                        "ld",
-                                        "load",
-                                        "take",
-                                        "t",
-                                        "h",
-                                        "hint",
-                                        "o",
-                                        "open"
-                                        ));
-        
-
-        // The above needs a better method.  
-        // It should walk through the room lists and add things 
-        // to the object list.
-
-
-
         public Game(){
 
                 ThingList chest_inventory = new ThingList(  );
@@ -128,49 +95,23 @@ public class Game implements Serializable{
                 if(lowstr.equals("")){
                         s = "You must enter a command.";
                 } else {
-                        List<String> wl = wordList(lowstr);
+                        List<String> wl = Parser.wordList(lowstr);
                         // wl.forEach( (astr) -> System.out.println(astr) );
-                        s = parseCommand(wl);
+                        s = getCommand( wl ); 
                 }
                 return "Status: " + s;
         }
 
-        private List<String> wordList(String input){
-                String delimiters = " \t,.:;?!\"'";
-                String token;
-
-                List<String> stringList = new ArrayList<>();
-                StringTokenizer tokenizer = new StringTokenizer(input, delimiters);
-                 while(tokenizer.hasMoreTokens()){
-                         token = tokenizer.nextToken();
-                         stringList.add(token);
-                 }
-                 return stringList;
-        }
-
-        private String parseCommand(List<String> wordlist){
-                String verb = "";
-                String noun = "";
+        private String getCommand( List<String> wordlist  ){
                 String msg = "Something is not quite right.\n";
 
-                if( wordlist.size() > 0 ) {
-                        verb = wordlist.get( 0 );
-                        if( wordlist.size() > 1 ) {
-                                noun = wordlist.get( 1 );
-                        }
+                cmd = Parser.parseCommand(wordlist);
+                if( cmd != null ){
+                        msg = processCommand( cmd );
                 }
 
-                if( commands.contains( verb ) ) {
-                        msg = processCommand( verb, noun );
-                } else {
-                        msg = verb + " is not a known verb.";
-                }
-                
-                
                 return msg;
-        
-
-       }
+        }
 
        private String movePlayer(Player aPlayer, Direction dir){
                 Room r = aPlayer.getLocation();
@@ -212,6 +153,8 @@ public class Game implements Serializable{
                                         return "Not an exit.";
                                 }
                         }
+                        case Direction.UP -> { return "Not an exit"; }
+                        case Direction.DOWN -> { return "Not an exit"; }
                         case Direction.NOEXIT -> { return "That direction is not an exit"; }
 
                 }
@@ -219,20 +162,20 @@ public class Game implements Serializable{
 
        }
 
-       private String processCommand(String verb, String noun){
+       private String processCommand(CmdObj command){
                String msg = "Command failed\n";
 
-               switch(verb){
+               switch(command.verb( ) ){
                         case "l", "look"-> { msg = player.getLocation().describe(); }
-                        case "t", "take"-> { msg = takeObject(noun); }
-                        case "d", "drop"-> { msg = dropObject(noun); }    
+                        case "t", "take"-> { msg = takeObject(command.noun()); }
+                        case "d", "drop"-> { msg = dropObject(command.noun()); }    
                         case "i", "inventory" -> { msg = player.showInventory(); } 
-                        case "n", "s", "e", "w" -> { msg = processMove( verb ); } 
-                        case "north", "south", "east", "west" -> { msg = processMove( verb ); } 
+                        case "n", "s", "e", "w" -> { msg = processMove( command.verb() ); } 
+                        case "north", "south", "east", "west" -> { msg = processMove( command.verb() ); } 
                         case "sv", "save" -> { msg = saveGame( );   }
                         case "ld", "load" -> { msg = loadGame(  );  } 
                         case "h", "hint" -> { msg = hint(  ); } 
-                        case "o", "open" -> { msg = openObject( noun ); }
+                        case "o", "open" -> { msg = openObject( command.noun() ); }
                         default-> msg = "I didn't understand that request.";
 
                }
@@ -270,9 +213,10 @@ public class Game implements Serializable{
 
                if( t == null ) {
                        retStr = "There is no " + object + " here.";
+                       return retStr;   //  Must break early if t is null
                }
 
-                if( t.getTakable() ) {
+                if( t.getTakable() ){
                         transferObj( t, player.getLocation().getThings(), player.getBag() );
                         retStr = t.getName() + " taken\n";
                 } else {
@@ -349,7 +293,7 @@ public class Game implements Serializable{
                        Game loaded = ( Game ) ois.readObject(  );
                        this.map = loaded.map;
                        this.player = loaded.player;
-                       this.commands = loaded.commands;
+                       //this.commands = loaded.commands;
                        ois.close(  );
                        msg = "\n---Game Loaded---\n";
                } catch (Exception e) {
