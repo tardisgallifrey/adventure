@@ -18,7 +18,8 @@
     -- refactored from processCommand( verb, noun ) to processCommand( CmdObj command )
     -- added CmdObj object to pass verb noun ( and future words ) 
     -- fixed takeObject to return immediately upon null value in t object
-
+8/30/26
+    -- refactored Parser and Game to use vocabulary instead of command list.
     
 
 

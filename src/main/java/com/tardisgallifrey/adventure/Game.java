@@ -163,19 +163,19 @@ public class Game implements Serializable{
        }
 
        private String processCommand(CmdObj command){
+
                String msg = "Command failed\n";
 
                switch(command.verb( ) ){
-                        case "l", "look"-> { msg = player.getLocation().describe(); }
-                        case "t", "take"-> { msg = takeObject(command.noun()); }
-                        case "d", "drop"-> { msg = dropObject(command.noun()); }    
-                        case "i", "inventory" -> { msg = player.showInventory(); } 
-                        case "n", "s", "e", "w" -> { msg = processMove( command.verb() ); } 
-                        case "north", "south", "east", "west" -> { msg = processMove( command.verb() ); } 
-                        case "sv", "save" -> { msg = saveGame( );   }
-                        case "ld", "load" -> { msg = loadGame(  );  } 
-                        case "h", "hint" -> { msg = hint(  ); } 
-                        case "o", "open" -> { msg = openObject( command.noun() ); }
+                        case "look"-> { msg = player.getLocation().describe(); }
+                        case "take"-> { msg = takeObject(command.noun()); }
+                        case "drop"-> { msg = dropObject(command.noun()); }    
+                        case "check" -> { msg = player.showInventory(); } 
+                        case "go" -> { msg = processMove( command.noun() ); } 
+                        case "save" -> { msg = saveGame( );   }
+                        case "load" -> { msg = loadGame(  );  } 
+                        case "hint" -> { msg = hint(  ); } 
+                        case "open" -> { msg = openObject( command.noun() ); }
                         default-> msg = "I didn't understand that request.";
 
                }

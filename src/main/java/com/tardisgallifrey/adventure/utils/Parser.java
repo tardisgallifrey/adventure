@@ -2,40 +2,55 @@ package com.tardisgallifrey.adventure.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class Parser{
-        static List<String> commands = new ArrayList<>(Arrays.asList("take",
-                                        "drop",
-                                        "d",
-                                        "north",
-                                        "n",
-                                        "south",
-                                        "s",
-                                        "east",
-                                        "e",
-                                        "west",
-                                        "w",
-                                        "look",
-                                        "l",
-                                        "inventory",
-                                        "i",
-                                        "sv",
-                                        "save",
-                                        "ld",
-                                        "load",
-                                        "take",
-                                        "t",
-                                        "h",
-                                        "hint",
-                                        "o",
-                                        "open",
-                                        "u",
-                                        "up",
-                                        "down"
-                                        ));
- 
+
+        static HashMap<String, WT> vocab = new HashMap<>();
+
+        static void initVocab( ){
+                vocab.put( "drop", WT.VERB );
+                vocab.put( "north", WT.NOUN );
+                vocab.put( "check", WT.VERB ); 
+                vocab.put( "go", WT.VERB );
+                vocab.put( "south", WT.NOUN );
+                vocab.put( "east", WT.NOUN );
+                vocab.put( "west", WT.NOUN );
+                vocab.put( "look", WT.VERB );
+                vocab.put( "give", WT.VERB );
+                vocab.put( "take", WT.VERB );
+                vocab.put( "move", WT.VERB );
+                vocab.put( "save", WT.VERB );
+                vocab.put( "load", WT.VERB );
+                vocab.put( "game", WT.NOUN );
+                vocab.put( "inventory", WT.NOUN );
+                vocab.put( "up", WT.VERB );
+                vocab.put( "down", WT.VERB ); 
+                vocab.put( "sword", WT.NOUN );
+                vocab.put( "bone", WT.NOUN );
+                vocab.put( "button", WT.NOUN );
+                vocab.put( "carrot", WT.NOUN );
+                vocab.put( "chest", WT.NOUN );
+                vocab.put( "the", WT.ARTICLE );
+                vocab.put( "a", WT.ARTICLE );
+                vocab.put( "an", WT.ARTICLE );
+                vocab.put( "in", WT.PREPOSITION );
+                vocab.put( "into", WT.PREPOSITION );
+                vocab.put( "on", WT.PREPOSITION );
+                vocab.put( "onto", WT.PREPOSITION );
+                vocab.put( "small", WT.ADJECTIVE );
+                vocab.put( "large", WT.ADJECTIVE );
+                vocab.put( "big", WT.ADJECTIVE );
+                vocab.put( "little", WT.ADJECTIVE ); 
+                vocab.put( "open", WT.VERB );
+                vocab.put( "close", WT.VERB ); 
+                vocab.put( "here", WT.NOUN );
+                vocab.put( "there", WT.NOUN );
+                vocab.put( "shut", WT.VERB ); 
+
+        }
 
 
         public static List<String> wordList(String input){
@@ -51,26 +66,42 @@ public class Parser{
                  return stringList;
         }
 
-        public static CmdObj parseCommand(List<String> wordlist){
+       public static CmdObj parseCommand( List<String> wordlist ) {
+                
+               WT wordtype;
                 String verb = "";
                 String noun = "";
-
-                if( wordlist.size() > 0 ) {
-                        verb = wordlist.get( 0 );
-                        if( wordlist.size() > 1 ) {
-                                noun = wordlist.get( 1 );
-                        }
-                }
-
-                if( !commands.contains( verb ) ) {
-                        verb += " is not a known verb.";
-                }
+                // String preposition = "";     // future
+                // String adjective = "";       // future
                 
-                
-                return new CmdObj( verb, noun ) ;
-        
+                initVocab();
 
-       }
+               for( String k : wordlist ){
+                       System.out.println(k);
+                       if( vocab.containsKey( k ) ){
+                               wordtype = vocab.get( k );
+                               System.out.println(wordtype);
+
+                               switch( wordtype ){
+                                        case WT.VERB -> { verb = k; }
+                                        case WT.NOUN -> { noun = k; }
+                                        case WT.ARTICLE -> { }
+                                        case WT.PREPOSITION -> { }
+                                        case WT.ADJECTIVE -> { }
+                                        case WT.CONJUNCTION -> { }
+                                        case WT.UNKNOWN -> { }
+                                        case WT.ERROR -> { }
+                               }
+
+                       } else {
+                               if( verb.equals( "" ) ){ 
+                                verb = k + " is not a known word.";
+                               }
+                       }
+ 
+                }
+                return new CmdObj( verb, noun ); 
+        }
 
 
 
