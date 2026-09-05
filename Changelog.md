@@ -20,6 +20,11 @@
     -- fixed takeObject to return immediately upon null value in t object
 8/30/26
     -- refactored Parser and Game to use vocabulary instead of command list.
+9/04/26
+    -- added one simple JUnit test, broke gradle
+9/05/26
+    -- worked with chatGPT, fixed build.gradle.kts 
+    -- made some test changes to build.gradle.kts
     
 
 
