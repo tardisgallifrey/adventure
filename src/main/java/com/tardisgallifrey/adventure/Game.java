@@ -174,7 +174,7 @@ public class Game implements Serializable{
                         case "go" -> { msg = processMove( command.noun() ); } 
                         case "save" -> { msg = saveGame( );   }
                         case "load" -> { msg = loadGame(  );  } 
-                        case "hint" -> { msg = hint(  ); } 
+                        case "give" -> { msg = hint(  ); } 
                         case "open" -> { msg = openObject( command.noun() ); }
                         default-> msg = "I didn't understand that request.";
 
@@ -249,14 +249,14 @@ public class Game implements Serializable{
 
 
 
-       private String processMove(String verb){
+       private String processMove(String noun){
                String msg = "something failed\n";
 
-               switch(verb){
-                       case "n", "north" -> { msg = movePlayer(player, Direction.NORTH); }
-                       case "s", "south" -> { msg = movePlayer(player, Direction.SOUTH); }
-                       case "e", "east" -> { msg = movePlayer(player, Direction.EAST); }
-                       case "w", "west" -> { msg = movePlayer(player, Direction.WEST); }
+               switch(noun){
+                       case "north" -> { msg = movePlayer(player, Direction.NORTH); }
+                       case "south" -> { msg = movePlayer(player, Direction.SOUTH); }
+                       case "east" -> { msg = movePlayer(player, Direction.EAST); }
+                       case "west" -> { msg = movePlayer(player, Direction.WEST); }
 
                }
                return msg;
@@ -305,7 +305,7 @@ public class Game implements Serializable{
        }
 
        private String hint(  ){
-               String msg = "Try using north, south, east, or west\n";
+               String msg = "Try using go and a direction\nOr, try to look around\n";
 
                return msg;
        }

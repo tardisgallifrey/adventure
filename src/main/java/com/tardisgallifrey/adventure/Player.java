@@ -1,5 +1,6 @@
 package com.tardisgallifrey.adventure;
 
+import com.tardisgallifrey.adventure.utils.ThingandThingHolder;
 
 public class Player extends Thing {
 
@@ -23,6 +24,26 @@ public class Player extends Thing {
         public ThingList getBag(){
                 return this.bagOfHolding;
         }
+
+        public ThingandThingHolder isThinginInventory( String objectName ){
+
+                return null;
+        }
+
+        public ThingandThingHolder isThinginRoom( String objectName ){
+                return null;
+        }
+
+        public ThingandThingHolder isThingHere( String objectName ){
+                ThingandThingHolder t_and_th = null;
+                t_and_th = isThinginInventory( objectName );
+                if( t_and_th == null ){
+                        t_and_th = isThinginRoom( objectName );
+                }
+                return t_and_th;
+        }
+
+
 
         public String showInventory(){
                 StringBuilder s = new StringBuilder();

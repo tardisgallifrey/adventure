@@ -49,6 +49,16 @@ public class Parser{
                 vocab.put( "here", WT.NOUN );
                 vocab.put( "there", WT.NOUN );
                 vocab.put( "shut", WT.VERB ); 
+                vocab.put( "ring", WT.NOUN );
+                vocab.put( "wombat", WT.NOUN );
+                vocab.put( "bow", WT.NOUN );
+                vocab.put( "quiver", WT.NOUN );
+                vocab.put( "armor", WT.NOUN );
+                vocab.put( "ruby", WT.NOUN );
+                vocab.put( "helm", WT.NOUN );
+                vocab.put( "longsword", WT.NOUN );
+                vocab.put( "diamond", WT.NOUN ); 
+                vocab.put( "hint", WT.NOUN ); 
 
         }
 
@@ -77,10 +87,10 @@ public class Parser{
                 initVocab();
 
                for( String k : wordlist ){
-                       System.out.println(k);
+                       // System.out.println(k);  // for debugging only
                        if( vocab.containsKey( k ) ){
                                wordtype = vocab.get( k );
-                               System.out.println(wordtype);
+                               // System.out.println(wordtype);   // for debugging only
 
                                switch( wordtype ){
                                         case WT.VERB -> { verb = k; }
@@ -89,7 +99,7 @@ public class Parser{
                                         case WT.PREPOSITION -> { }
                                         case WT.ADJECTIVE -> { }
                                         case WT.CONJUNCTION -> { }
-                                        case WT.UNKNOWN -> { }
+                                        case WT.UNKNOWN -> { vocab.put( k, WT.UNKNOWN ); }
                                         case WT.ERROR -> { }
                                }
 

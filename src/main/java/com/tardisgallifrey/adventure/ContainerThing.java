@@ -42,6 +42,14 @@ public class ContainerThing extends ThingHolder implements Serializable {
                 this.isopen = false;
         }
 
+        public boolean isOpen( ){
+                if( this.isopen ){
+                        return true;
+                }else{
+                        return false;
+                }
+        }
+
 
         public String showInventory(){
                 StringBuilder s = new StringBuilder();
