@@ -1,6 +1,6 @@
 package com.tardisgallifrey.adventure;
 
-import com.tardisgallifrey.adventure.utils.ThingandThingHolder;
+import com.tardisgallifrey.adventure.utils.CmdObj;
 
 public class Player extends Thing {
 
@@ -25,24 +25,54 @@ public class Player extends Thing {
                 return this.bagOfHolding;
         }
 
-        public ThingandThingHolder isThinginInventory( String objectName ){
-
-                return null;
-        }
-
-        public ThingandThingHolder isThinginRoom( String objectName ){
-                return null;
-        }
-
-        public ThingandThingHolder isThingHere( String objectName ){
-                ThingandThingHolder t_and_th = null;
-                t_and_th = isThinginInventory( objectName );
-                if( t_and_th == null ){
-                        t_and_th = isThinginRoom( objectName );
+        public boolean isThinginInventory( String objectName ){
+                Thing t = findThing( objectName, this.getBag() ); 
+                if( t != null && t.getName( ).equals( objectName ) ){
+                        return true;
                 }
-                return t_and_th;
+                return false;
         }
 
+        public boolean isThinginRoom( String objectName ){
+                Thing t = findThing( objectName, this.location.getThings() );
+                if( t != null && t.getName( ).equals( objectName ) ){
+                        return true;
+                }
+                return false;
+        }
+
+        public boolean isThingHere( String objectName ){
+                if( isThinginInventory(objectName) ){
+                        return true;
+                }
+
+                if( isThinginRoom( objectName ) ){
+                        return true;
+                }
+
+                return false;
+        }
+
+
+        Thing findThing( String objectName, ThingList tl ){
+
+                for( Thing t : tl ){
+                        if( t.getName( ).equals( objectName ) ){
+                                return t;
+                        }
+                }
+                return null;
+
+        }
+
+        public void takeObj( CmdObj command, ThingList tl ){
+        }
+
+        public void dropObj( CmdObj command ){
+        }
+
+        public void putObjInto( CmdObj command, ThingList tl ){
+        }
 
 
         public String showInventory(){

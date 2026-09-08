@@ -25,6 +25,11 @@
 9/05/26
     -- worked with chatGPT, fixed build.gradle.kts 
     -- made some test changes to build.gradle.kts
+9/08/26
+    -- finished and tested Player.isThinginInventory(), isThinginRoom().
+    -- two of three steps finished for isThingHere();
+    -- stubs for Player.takeObj, Player.drop, Player.putInTo.
+    -- added tests for working new methods.
     
 
 

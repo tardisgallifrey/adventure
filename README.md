@@ -1,4 +1,4 @@
-# A Java text Adventure Game
+# A Java text Adventure Game -- V0.4
 
 I am working through how to build text-games in Java.  I am using Huw Collingbourne's book, "The Little Book of Adventure Game Programming in Java" as my guide.  This is Huw's program from the book, as I build it.  I am making some minor changes as I go on to fit how I think it should work.
 
@@ -10,7 +10,9 @@ Completed simple save and load game feature.
 
 Completed simple hint feature.
 
-Will be working on take, can't take, move, can't move feature.  Then, enemies and combat.
+Completed take, move, features.
+
+Finished book, major architecture change ongoing.
 
 ##  Update for August 2026 
 
@@ -25,5 +27,21 @@ At this point, the game will show room features (items), move from room to room,
 The game now has a save and load feature, which only saves the current game, not multiple games.
 
 To get a hint, type 'h' or 'hint' at the prompt.  
+
+## Update for September 2026
+
+I reached the end of *Collingbourne's* book.  I have had to make a major architecture decision.  I agree somewhat with his concepts, but not the actions.  He seemed to be writing as everything was about to become a ThingHolder class, which had not been the case up to this point.  Player and Room classes do not act like containers.  They may contain containers, which is part of the issue.  
+
+In order to come to a conclusion and direction which I could handle, I decided to finish the book, put it away and go forward.  Every class that holds something has a ThingList.  Players have a ThingList ( inventory ).  Rooms have a Thinglist ( things ).  All other containers that are ThingHolder class also contain ThingLists ( chests, sacks, bowls, whatever ).  Additionally, Players are Things, Rooms are Things, and containers are Things ( ThingHolder extends Thing ).  Yet, ThingHolder has properties that don't go up the class hierarchy, namely open/close; *the ability for its ThingList to be hidden from view*.
+
+So, I am going to move torwards using the ThingList as the base container class and devise ways to sort out what I am looking into for items.  
+
+The author also is moving towards a vocabulary method of determining user commands from user input.  I have begun this and will extend it.  Rather than a list of two words returned from the parser, we will now return a CmdObject record which can contain multiple words.  Every process can pass along the object and methods can use what they need and avoid the rest.  This opens up the use of preposiitons ( *look in*, *put in* ) and adjectives ( *wood chest* versus *silver chest* ).
+
+Finally, we will move toward the Player class being responsible for player actions ( take, drop, look, view, etc. ).  Motion will likely remain in Game for now as it is responsible for map position of the character.
+
+### TLDR, I want to play the game
+
+You may download just the `jar` file to play if you don't wish to use the rest of the game.  The file is `adventure.jar` in the root folder above.  It will play on Linux or Windows with `java -jar adventure.jar`.  There are only four rooms and a limited number of items at the moment.  You may open the chest, but can't take items just yet.  Please add in issue if you find a problem.  I welcome any bug fixes.  Sorry, feature adds right now will be ignored until I reach V1.0. 
 
 
