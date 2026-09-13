@@ -81,8 +81,8 @@ public class Parser{
                WT wordtype;
                 String verb = "";
                 String noun = "";
-                // String preposition = "";     // future
-                // String adjective = "";       // future
+                String preposition = "";     // future
+                String adjective = "";       // future
                 
                 initVocab();
 
@@ -95,9 +95,9 @@ public class Parser{
                                switch( wordtype ){
                                         case WT.VERB -> { verb = k; }
                                         case WT.NOUN -> { noun = k; }
-                                        case WT.ARTICLE -> { }
-                                        case WT.PREPOSITION -> { }
-                                        case WT.ADJECTIVE -> { }
+                                        case WT.ARTICLE -> { /* articles are skipped */ }
+                                        case WT.PREPOSITION -> { preposition = k; }
+                                        case WT.ADJECTIVE -> { adjective = k; }
                                         case WT.CONJUNCTION -> { }
                                         case WT.UNKNOWN -> { vocab.put( k, WT.UNKNOWN ); }
                                         case WT.ERROR -> { }
@@ -110,7 +110,7 @@ public class Parser{
                        }
  
                 }
-                return new CmdObj( verb, noun ); 
+                return new CmdObj( verb, preposition, adjective, noun ); 
         }
 
 

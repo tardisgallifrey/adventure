@@ -168,85 +168,20 @@ public class Game implements Serializable{
 
                switch(command.verb( ) ){
                         case "look"-> { msg = player.getLocation().describe(); }
-                        case "take"-> { msg = takeObject(command.noun()); }
-                        case "drop"-> { msg = dropObject(command.noun()); }    
+                        case "take"-> { msg = player.takeObj( command, player.getLocation( ).getThings( )); }
+                        case "drop"-> { msg = player.dropObj( command, player.getBag( ) ); }    
                         case "check" -> { msg = player.showInventory(); } 
                         case "go" -> { msg = processMove( command.noun() ); } 
                         case "save" -> { msg = saveGame( );   }
                         case "load" -> { msg = loadGame(  );  } 
                         case "give" -> { msg = hint(  ); } 
-                        case "open" -> { msg = openObject( command.noun() ); }
+                        case "open" -> { msg = player.openObject(command); }
                         default-> msg = "I didn't understand that request.";
 
                }
                return msg;
 
        }
-
-       private String openObject( String object ){
-               String retStr = "";
-               Thing t = player.getLocation().getThings().thisObj( object );
-
-               if( t instanceof ContainerThing ){
-                        ContainerThing container = ( ContainerThing ) t;
-                        if( container.isOpenable( )  ){
-                                container.open( );
-                                retStr = "You opened the " + container.getName( ) + ".\n";
-                                System.out.println( container.showInventory() );
-                        } else {
-                                retStr = "You didn't open the " + container.getName( ) + ".\n";
-                        }
-               } else {
-                       retStr = t.getName( ) + " is not able to be opened.\n";
-               }
-
-                return retStr;
-       }
-
-       private String takeObject( String object ){
-               String retStr = "";
-               Thing t = player.getLocation().getThings().thisObj(object);
-
-               if( object.equals("") ){
-                       object = "nameless object"; // if no object specified
-               }
-
-               if( t == null ) {
-                       retStr = "There is no " + object + " here.";
-                       return retStr;   //  Must break early if t is null
-               }
-
-                if( t.getTakable() ){
-                        transferObj( t, player.getLocation().getThings(), player.getBag() );
-                        retStr = t.getName() + " taken\n";
-                } else {
-                        retStr = "You cannot take " + t.getName();
-                }
-                return retStr;
-       }
-
-       private String dropObject( String object ){
-               String retStr = "";
-
-               Thing t = player.getBag().thisObj( object );
-
-               if( t == null ) {
-                       retStr = "You haven't got one of those.";
-               } else {
-                       transferObj( t, player.getBag(), player.getLocation().getThings() );
-                       retStr = "Dropping " + t.getName();
-               }
-
-               return retStr;
-       }
-
-       private void transferObj( Thing t, ThingList  fromList, ThingList  toList ) {
-
-               fromList.remove(t);
-               toList.add(t);
-
-       }
-
 
 
        private String processMove(String noun){
