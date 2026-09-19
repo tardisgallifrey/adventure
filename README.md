@@ -44,4 +44,16 @@ Finally, we will move toward the Player class being responsible for player actio
 
 You may download just the `jar` file to play if you don't wish to use the rest of the game.  The file is `adventure.jar` in the root folder above.  It will play on Linux or Windows with `java -jar adventure.jar`.  There are only four rooms and a limited number of items at the moment.  You may open the chest, but can't take items just yet.  Please add in issue if you find a problem.  I welcome any bug fixes.  Sorry, feature adds right now will be ignored until I reach V1.0. 
 
+### Some game commands
+
+* look
+* take
+* open
+* hint
+* go
+* save
+* load
+* check
+
+Combine the commands ( verbs ) with nouns that you can see or know ( south, north, key, sword ) and see where you can go.
 

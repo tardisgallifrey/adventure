@@ -30,6 +30,15 @@
     -- two of three steps finished for isThingHere();
     -- stubs for Player.takeObj, Player.drop, Player.putInTo.
     -- added tests for working new methods.
+9/13/26
+    -- finished and tested Player.isThingHere(), openObject( )
+    -- all player actions are now located in Player.
+    -- Game calls Player to take actions.
+9/19/26
+    -- created processPreposition method in Game
+    -- modified takeObj to take from containers
+
+
     
 
 

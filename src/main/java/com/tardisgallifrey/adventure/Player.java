@@ -72,7 +72,7 @@ public class Player extends Thing {
 
        public String openObject( CmdObj command ){
                String retStr = "";
-               Thing t = this.getLocation().getThings().thisObj( command.noun( ) );
+               Thing t = this.getLocation().getThings().thisObj( command.noun1( ) );
 
                if( t instanceof ContainerThing ){
                         ContainerThing container = ( ContainerThing ) t;
@@ -94,26 +94,26 @@ public class Player extends Thing {
         public String takeObj( CmdObj command, ThingList tl ){
                String retStr = "";
 
-               if( command.noun( ).equals("") ){
+               if( command.noun1( ).equals("") ){
                        return retStr = "nameless object"; // if no object specified
                }
 
                if( tl == null ) {
-                       retStr = "There is no " + command.noun( )  + " here.";
-                       return retStr;   //  Must break early if t is null
+                       retStr = "Nothing to take " + command.noun1( ) + " from.\n";
+                       return retStr;   //  Must break early if tl is null
                }
 
 
-               if( tl != null && this.isThingHere( command.noun( ) ) ){
-                        Thing found = tl.thisObj( command.noun( ) ); 
-                        if( found.getTakable( )  ){ 
+               if( tl != null && this.isThingHere( command.noun1( ) ) ){
+                        Thing found = tl.thisObj( command.noun1( ) ); 
+                        if( found != null && found.getTakable( )  ){ 
                                 transferObj( found, tl, this.bagOfHolding );
-                                retStr = command.noun( ) + " taken.\n";
+                                retStr = command.noun1( ) + " taken.\n";
                         } else {
-                                retStr = command.noun( ) + " cannot be taken.\n";
+                                retStr = command.noun1( ) + " cannot be taken.\nOr, you didn't say what to take object from.\n";
                         }
                } else {
-                       retStr = command.noun( ) + " is not found here.\n";
+                       retStr = command.noun1( ) + " is not found here.\n";
                }
         
                return retStr;
@@ -123,27 +123,32 @@ public class Player extends Thing {
         public String dropObj( CmdObj command, ThingList tl ){
                String retStr = "";
 
-               if( command.noun( ).equals("") ){
+               if( command.noun1( ).equals("") ){
                        retStr = "nameless object"; // if no object specified
                }
 
                if( tl == null ) {
-                       retStr = "There is no " + command.noun( )  + " here.";
+                       retStr = "There is no " + command.noun1( )  + " here.";
                        return retStr;   //  Must break early if t is null
                }
 
 
-               if( tl != null && this.isThingHere( command.noun( ) ) ){
-                        Thing found = tl.thisObj( command.noun( ) ); 
+               if( tl != null && this.isThingHere( command.noun1( ) ) ){
+                        Thing found = tl.thisObj( command.noun1( ) ); 
                         transferObj( found, tl, this.location.getThings( ) ); 
-                        retStr = command.noun( ) + " dropped.\n";
+                        retStr = command.noun1( ) + " dropped.\n";
                }
         
                return retStr;
  
         }
 
-        public void putObjInto( CmdObj command, ThingList tl ){
+        public String putObjInto( CmdObj command, ThingList tl ){
+                String msg = "";
+
+                msg = "You put something into something.\n";
+
+                return msg;
         }
 
        private void transferObj( Thing t, ThingList  fromList, ThingList  toList ) {

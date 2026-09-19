@@ -19,7 +19,7 @@ public class Game implements Serializable{
         public Game(){
 
                 ThingList chest_inventory = new ThingList(  );
-                chest_inventory.add( new Thing( "key", " it opens something", true, true) );
+                chest_inventory.add( new Thing( "key", " a small iron key; it opens something", true, true) );
                 chest_inventory.add( new Thing( "jacket", " a warm leather jacket", true, true ) ); 
                 ContainerThing chestWood = new ContainerThing( "chest", " a wooden chest", chest_inventory, false, false, true, false);
                 map = new ArrayList<>();
@@ -168,26 +168,49 @@ public class Game implements Serializable{
 
                switch(command.verb( ) ){
                         case "look"-> { msg = player.getLocation().describe(); }
-                        case "take"-> { msg = player.takeObj( command, player.getLocation( ).getThings( )); }
+                        case "take"-> { msg = processPreposition( command ); }
                         case "drop"-> { msg = player.dropObj( command, player.getBag( ) ); }    
                         case "check" -> { msg = player.showInventory(); } 
-                        case "go" -> { msg = processMove( command.noun() ); } 
+                        case "go" -> { msg = processMove( command ); } 
                         case "save" -> { msg = saveGame( );   }
                         case "load" -> { msg = loadGame(  );  } 
                         case "give" -> { msg = hint(  ); } 
                         case "open" -> { msg = player.openObject(command); }
+                        case "put" -> { msg = processPreposition( command ); }
                         default-> msg = "I didn't understand that request.";
 
                }
                return msg;
 
        }
+      
+       private String processPreposition( CmdObj command ){
+               String msg = "";
+
+               switch( command.preposition( ) ){
+                        case "from" -> { 
+                                if( !command.noun2( ).isBlank( ) && player.isThingHere( command.noun2( ) ) ){
+                                        Thing thing = player.getLocation( ).getThings( ).thisObj( command.noun2( ) );
+                                        if( thing != null && thing instanceof ContainerThing ){
+                                                ContainerThing container = ( ContainerThing ) thing;
+                                                msg = player.takeObj( command, container.getThingList( ) ); 
+                                        }
+                                } else {
+                                        msg = "I'm not sure what you are asking to do.\n";
+                                }
+
+                        }
+                        case "in", "into" -> { msg = player.putObjInto( command, player.getLocation( ).getThings( ) ); }
+                        default -> { msg = player.takeObj( command, player.getLocation( ).getThings( ) ); }
+               }
+               return msg;
+       }
 
 
-       private String processMove(String noun){
+       private String processMove(CmdObj command ){
                String msg = "something failed\n";
 
-               switch(noun){
+               switch(command.noun1( ) ){
                        case "north" -> { msg = movePlayer(player, Direction.NORTH); }
                        case "south" -> { msg = movePlayer(player, Direction.SOUTH); }
                        case "east" -> { msg = movePlayer(player, Direction.EAST); }
@@ -240,9 +263,13 @@ public class Game implements Serializable{
        }
 
        private String hint(  ){
-               String msg = "Try using go and a direction\nOr, try to look around\n";
+               StringBuilder msg = new StringBuilder( ); 
 
-               return msg;
+               msg.append( "Try using go and a direction\nOr, try to look around\n" );
+               msg.append( "\nIf you are taking something out of something,\n" );
+               msg.append( "you might need to say what you are taking it from.\n" );
+
+               return msg.toString( );
        }
 
 

@@ -86,7 +86,7 @@ public class AdventureTests{
 
         @Test
         void testTakeObjectFromThingList( ){
-                CmdObj command = new CmdObj("", "", "", "sword");
+                CmdObj command = new CmdObj("", "sword", "", "", "");
                 ThingList inventory = new ThingList( );
                 inventory.add( new Thing("carrot", "a tasty carrot", true, true) );
                 inventory.add( new Thing( "shirt", "a nice satin shirt", true, true) );
@@ -112,7 +112,7 @@ public class AdventureTests{
 
                 Player newPlayer = new Player("Bob", "a pleasant sort", aRoom, inventory);
                 newPlayer.takeObj( command, room ); 
-                command = new CmdObj("", "", "", "chest");
+                command = new CmdObj("", "chest", "", "", "");
                 newPlayer.openObject( command ); 
 
                 assertTrue( newPlayer.isThingHere( "key" ) );
@@ -124,7 +124,7 @@ public class AdventureTests{
 
         @Test
         void testDropObjectintoRoomList( ){
-                CmdObj command = new CmdObj("", "", "", "shirt");
+                CmdObj command = new CmdObj("", "shirt", "", "", "");
                 ThingList inventory = new ThingList( );
                 inventory.add( new Thing("carrot", "a tasty carrot", true, true) );
                 inventory.add( new Thing( "shirt", "a nice satin shirt", true, true) );
@@ -152,7 +152,7 @@ public class AdventureTests{
 
         @Test
         void testOpenContainer( ){
-                CmdObj command = new CmdObj("", "", "", "chest");
+                CmdObj command = new CmdObj("", "chest", "", "", "");
                 ThingList inventory = new ThingList( );
                 inventory.add( new Thing("carrot", "a tasty carrot", true, true) );
                 inventory.add( new Thing( "shirt", "a nice satin shirt", true, true) );
