@@ -59,7 +59,13 @@ public class Room extends Thing {
                         s.append("You are in " + this.getName() + "\n\t" + "It is " + this.getDescription());
                         s.append("\n  This room contains: \n");
                         for( Thing thing : roomThings ){
-                                s.append("\n\t\t" + thing.describe());
+                                s.append( "\n\t\t" + thing.describe( ) ); 
+                                if( thing instanceof ContainerThing ){
+                                        ContainerThing container = ( ContainerThing ) thing;
+                                        if( container != null && container.isOpen( ) ){
+                                                s.append( container.showInventory());
+                                        }
+                                } 
                         }
 
                 } else {

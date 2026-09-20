@@ -1,7 +1,6 @@
 package com.tardisgallifrey.adventure.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -59,6 +58,15 @@ public class Parser{
                 vocab.put( "longsword", WT.NOUN );
                 vocab.put( "diamond", WT.NOUN ); 
                 vocab.put( "hint", WT.NOUN ); 
+                vocab.put( "put", WT.VERB );
+                vocab.put( "in", WT.PREPOSITION );
+                vocab.put( "into", WT.PREPOSITION );
+                vocab.put( "from", WT.PREPOSITION );
+                vocab.put( "out of", WT.PREPOSITION );
+                vocab.put( "key", WT.NOUN );
+                vocab.put( "shirt", WT.NOUN ); 
+                vocab.put( "jacket", WT.NOUN ); 
+
 
         }
 
@@ -80,9 +88,10 @@ public class Parser{
                 
                WT wordtype;
                 String verb = "";
-                String noun = "";
-                // String preposition = "";     // future
-                // String adjective = "";       // future
+                String noun1 = "";
+                String noun2 = "";
+                String preposition = "";     // future
+                String adjective = "";       // future
                 
                 initVocab();
 
@@ -94,10 +103,15 @@ public class Parser{
 
                                switch( wordtype ){
                                         case WT.VERB -> { verb = k; }
-                                        case WT.NOUN -> { noun = k; }
-                                        case WT.ARTICLE -> { }
-                                        case WT.PREPOSITION -> { }
-                                        case WT.ADJECTIVE -> { }
+                                        case WT.NOUN -> { if( noun1 != null && noun1.isBlank( )  ){
+                                                                noun1 = k;
+                                                           } else {
+                                                                noun2 = k; 
+                                                           }
+                                                        }
+                                        case WT.ARTICLE -> { /* articles are skipped */ }
+                                        case WT.PREPOSITION -> { preposition = k; }
+                                        case WT.ADJECTIVE -> { adjective = k; }
                                         case WT.CONJUNCTION -> { }
                                         case WT.UNKNOWN -> { vocab.put( k, WT.UNKNOWN ); }
                                         case WT.ERROR -> { }
@@ -110,7 +124,8 @@ public class Parser{
                        }
  
                 }
-                return new CmdObj( verb, noun ); 
+
+                return new CmdObj( verb, noun1, preposition, adjective, noun2 ); 
         }
 
 

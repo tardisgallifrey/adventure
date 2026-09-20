@@ -19,7 +19,7 @@ public class Game implements Serializable{
         public Game(){
 
                 ThingList chest_inventory = new ThingList(  );
-                chest_inventory.add( new Thing( "key", " it opens something", true, true) );
+                chest_inventory.add( new Thing( "key", " a small iron key; it opens something", true, true) );
                 chest_inventory.add( new Thing( "jacket", " a warm leather jacket", true, true ) ); 
                 ContainerThing chestWood = new ContainerThing( "chest", " a wooden chest", chest_inventory, false, false, true, false);
                 map = new ArrayList<>();
@@ -168,91 +168,67 @@ public class Game implements Serializable{
 
                switch(command.verb( ) ){
                         case "look"-> { msg = player.getLocation().describe(); }
-                        case "take"-> { msg = takeObject(command.noun()); }
-                        case "drop"-> { msg = dropObject(command.noun()); }    
+                        case "take"-> { msg = processPreposition( command ); }
+                        case "drop"-> { msg = player.dropObj( command, player.getBag( ) ); }    
                         case "check" -> { msg = player.showInventory(); } 
-                        case "go" -> { msg = processMove( command.noun() ); } 
+                        case "go" -> { msg = processMove( command ); } 
                         case "save" -> { msg = saveGame( );   }
                         case "load" -> { msg = loadGame(  );  } 
                         case "give" -> { msg = hint(  ); } 
-                        case "open" -> { msg = openObject( command.noun() ); }
+                        case "open" -> { msg = player.openObject(command); }
+                        case "put" -> { msg = processPreposition( command ); }
                         default-> msg = "I didn't understand that request.";
 
                }
                return msg;
 
        }
+      
+       private String processPreposition( CmdObj command ){
+               String msg = "";
 
-       private String openObject( String object ){
-               String retStr = "";
-               Thing t = player.getLocation().getThings().thisObj( object );
+               switch( command.preposition( ) ){
+                        case "from" -> { 
+                                if( !command.noun2( ).isBlank( ) && player.isThingHere( command.noun2( ) ) ){
+                                        Thing thing = player.getLocation( ).getThings( ).thisObj( command.noun2( ) );
+                                        if( thing != null && thing instanceof ContainerThing ){
+                                                ContainerThing container = ( ContainerThing ) thing;
+                                                msg = player.takeObj( command, container.getThingList( ) ); 
+                                        }
+                                } else {
+                                        msg = "I'm not sure what you are asking to do.\n";
+                                }
 
-               if( t instanceof ContainerThing ){
-                        ContainerThing container = ( ContainerThing ) t;
-                        if( container.isOpenable( )  ){
-                                container.open( );
-                                retStr = "You opened the " + container.getName( ) + ".\n";
-                                System.out.println( container.showInventory() );
-                        } else {
-                                retStr = "You didn't open the " + container.getName( ) + ".\n";
                         }
-               } else {
-                       retStr = t.getName( ) + " is not able to be opened.\n";
+                        case "in", "into" -> { 
+                                if( !command.noun2( ).isBlank( )  && player.isThingHere( command.noun2( ) ) ){
+                                        for( Thing thing : player.getLocation( ).getThings( ) ){
+                                                if( thing.getName( ).equals( command.noun2( ) ) ){
+                                                        ContainerThing container = ( ContainerThing ) thing;
+                                                        if( container.isOpen( ) ){ 
+                                                                msg = player.putObjInto( command, container.getThingList( ) );
+                                                        }
+                                                }
+                                        }
+
+                                } else {
+                                        msg = "I'm not sure what you wish me to do.\nAre you sure " + command.noun2( ) + " is open?\n";
+                                }          
+
+                        }
+                        default -> {
+
+                                msg =  player.takeObj( command, player.getLocation( ).getThings( ) ); 
+                        }
                }
-
-                return retStr;
-       }
-
-       private String takeObject( String object ){
-               String retStr = "";
-               Thing t = player.getLocation().getThings().thisObj(object);
-
-               if( object.equals("") ){
-                       object = "nameless object"; // if no object specified
-               }
-
-               if( t == null ) {
-                       retStr = "There is no " + object + " here.";
-                       return retStr;   //  Must break early if t is null
-               }
-
-                if( t.getTakable() ){
-                        transferObj( t, player.getLocation().getThings(), player.getBag() );
-                        retStr = t.getName() + " taken\n";
-                } else {
-                        retStr = "You cannot take " + t.getName();
-                }
-                return retStr;
-       }
-
-       private String dropObject( String object ){
-               String retStr = "";
-
-               Thing t = player.getBag().thisObj( object );
-
-               if( t == null ) {
-                       retStr = "You haven't got one of those.";
-               } else {
-                       transferObj( t, player.getBag(), player.getLocation().getThings() );
-                       retStr = "Dropping " + t.getName();
-               }
-
-               return retStr;
-       }
-
-       private void transferObj( Thing t, ThingList  fromList, ThingList  toList ) {
-
-               fromList.remove(t);
-               toList.add(t);
-
+               return msg;
        }
 
 
-
-       private String processMove(String noun){
+       private String processMove(CmdObj command ){
                String msg = "something failed\n";
 
-               switch(noun){
+               switch(command.noun1( ) ){
                        case "north" -> { msg = movePlayer(player, Direction.NORTH); }
                        case "south" -> { msg = movePlayer(player, Direction.SOUTH); }
                        case "east" -> { msg = movePlayer(player, Direction.EAST); }
@@ -305,9 +281,13 @@ public class Game implements Serializable{
        }
 
        private String hint(  ){
-               String msg = "Try using go and a direction\nOr, try to look around\n";
+               StringBuilder msg = new StringBuilder( ); 
 
-               return msg;
+               msg.append( "Try using go and a direction\nOr, try to look around\n" );
+               msg.append( "\nIf you are taking something out of something,\n" );
+               msg.append( "you might need to say what you are taking it from.\n" );
+
+               return msg.toString( );
        }
 
 
