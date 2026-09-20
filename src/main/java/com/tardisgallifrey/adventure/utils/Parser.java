@@ -58,7 +58,7 @@ public class Parser{
                 vocab.put( "longsword", WT.NOUN );
                 vocab.put( "diamond", WT.NOUN ); 
                 vocab.put( "hint", WT.NOUN ); 
-                vocab.put( "put", WT.NOUN );
+                vocab.put( "put", WT.VERB );
                 vocab.put( "in", WT.PREPOSITION );
                 vocab.put( "into", WT.PREPOSITION );
                 vocab.put( "from", WT.PREPOSITION );

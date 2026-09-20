@@ -37,6 +37,12 @@
 9/19/26
     -- created processPreposition method in Game
     -- modified takeObj to take from containers
+9/20/26
+    -- finished putObjIntoWhat method of Player
+    -- finished processPreposition method of Game
+    -- modifed describe method of Room to alway show open containers
+    -- modified README.md
+
 
 
     

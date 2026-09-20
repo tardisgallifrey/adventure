@@ -200,8 +200,26 @@ public class Game implements Serializable{
                                 }
 
                         }
-                        case "in", "into" -> { msg = player.putObjInto( command, player.getLocation( ).getThings( ) ); }
-                        default -> { msg = player.takeObj( command, player.getLocation( ).getThings( ) ); }
+                        case "in", "into" -> { 
+                                if( !command.noun2( ).isBlank( )  && player.isThingHere( command.noun2( ) ) ){
+                                        for( Thing thing : player.getLocation( ).getThings( ) ){
+                                                if( thing.getName( ).equals( command.noun2( ) ) ){
+                                                        ContainerThing container = ( ContainerThing ) thing;
+                                                        if( container.isOpen( ) ){ 
+                                                                msg = player.putObjInto( command, container.getThingList( ) );
+                                                        }
+                                                }
+                                        }
+
+                                } else {
+                                        msg = "I'm not sure what you wish me to do.\nAre you sure " + command.noun2( ) + " is open?\n";
+                                }          
+
+                        }
+                        default -> {
+
+                                msg =  player.takeObj( command, player.getLocation( ).getThings( ) ); 
+                        }
                }
                return msg;
        }

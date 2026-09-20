@@ -144,12 +144,30 @@ public class Player extends Thing {
         }
 
         public String putObjInto( CmdObj command, ThingList tl ){
-                String msg = "";
+               String retStr = "";
 
-                msg = "You put something into something.\n";
+               if( command.noun1( ).equals("") ){
+                       return retStr = "nameless object"; // if no object specified
+               }
 
-                return msg;
-        }
+               if( tl == null ) {
+                       retStr = "Nothing to put " + command.noun1( ) + " inside.\n";
+                       return retStr;   //  Must break early if tl is null
+               }
+
+
+               if( tl != null && this.isThingHere( command.noun1( ) ) ){
+                        Thing thing = this.bagOfHolding.thisObj( command.noun1( ) ); 
+                        transferObj( thing , this.bagOfHolding, tl );
+                        retStr = command.noun1( ) + " put into " + command.noun2( ) +"\n";
+                } else {
+                        retStr = command.noun1( ) + " cannot be put there.\nOr, you didn't say what to put object into.\n";
+                }
+        
+                return retStr;
+ 
+
+       }
 
        private void transferObj( Thing t, ThingList  fromList, ThingList  toList ) {
 
