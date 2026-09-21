@@ -44,6 +44,8 @@ Finally, we will move toward the Player class being responsible for player actio
 
 I have finished the work to take things from a container or put things into a container.  I have also determined versioning up to V1.0.  I am at V0.8.  I need to add one more item to the game and that is the puzzle that will determine *end of game*.  When that is complete, the game will be at V0.9.  V1.0 will be achieved when I develop a real narrative story and add that into the Game class initialization.  At that point, I will stop and work on some other projects before adding new features.  Testing will continue for a bit, however.
 
+I am working on setting up CI with Codeberg so that I can produce an *msi* and *app-image* output for the game.  Microsoft has struck again and it is extremely difficult to download the jar file to Windows.
+
 ### TLDR, I want to play the game
 
 You may download just the `jar` file to play if you don't wish to use the rest of the game.  The file is `adventure.jar` in the root folder above.  It will play on Linux or Windows with `java -jar adventure.jar`.  There are only four rooms and a limited number of items at the moment.  You can open the chest, remove items, or put items in the chest.  Beware of forgetting to tell where to put items *in* or *into*.  Please add an issue if you find a problem.  I welcome any bug fixes.  Sorry, feature adds right now will be ignored until I reach V1.0. 
