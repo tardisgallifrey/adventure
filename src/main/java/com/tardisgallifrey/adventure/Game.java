@@ -1,56 +1,72 @@
 package com.tardisgallifrey.adventure;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 import com.tardisgallifrey.adventure.utils.Direction;
+import com.tardisgallifrey.adventure.utils.CmdObj;
+import com.tardisgallifrey.adventure.utils.Parser;
 
-public class Game {
+public class Game implements Serializable{
 
+        CmdObj cmd; 
         private ArrayList<Room> map;
         private Player player;
-        List<String> commands = new ArrayList<>(Arrays.asList("take",
-                                        "drop",
-                                        "north",
-                                        "n",
-                                        "south",
-                                        "s",
-                                        "east",
-                                        "e",
-                                        "west",
-                                        "w"
-                                        ));
-        List<String> objects = new ArrayList<>(Arrays.asList("sword",
-                                        "ring",
-                                        "snake"
-                                        ));
-
-
         public Game(){
+
+                ThingList chest_inventory = new ThingList(  );
+                chest_inventory.add( new Thing( "key", " a small iron key; it opens something", true, true) );
+                chest_inventory.add( new Thing( "jacket", " a warm leather jacket", true, true ) ); 
+                ContainerThing chestWood = new ContainerThing( "chest", " a wooden chest", chest_inventory, false, false, true, false);
                 map = new ArrayList<>();
+                ThingList forestList = new ThingList();
+                ThingList trollList = new ThingList();
+                ThingList caveList = new ThingList();
+                ThingList dungeonList = new ThingList();
+                dungeonList.add(new Treasure("ring", " a ring of great power", 600));
+                dungeonList.add(new Thing("wombat", " a cuddly, furry wombat in the corner squeaking to itself", false, true));
+
+                forestList.add(new Treasure("sword", " a decent short sword", 300));
+                forestList.add(new Treasure("bow" , " a fine sturdy warrior bow", 300));
+                forestList.add(new Treasure("quiver", " full of sharp pointy arrows", 100));
+
+                trollList.add(new Treasure("armor", " a suit of worthy chain mail armor", 1100));
+                trollList.add(new Treasure("ruby", " a fine bright red gem", 400));
+                trollList.add( chestWood ); 
+
+                caveList.add(new Treasure("helm", " a heavy lidded helm", 980));
+                caveList.add(new Treasure("longsword", " a long, gem studded, very sharp sword", 1200));
+                caveList.add(new Treasure("diamond", " a very precious carved diamond", 10000));
 
                 // Build map of world
-                map.add(new Room("Forest", " a leafy woodland",
+                map.add(new Room("the Forest", "a leafy woodland",
                                         Direction.NOEXIT, 
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
-                                        Direction.WEST));
-                map.add(new Room("Troll Room", " a dank room that smells of troll",
+                                        Direction.WEST,
+                                        forestList));
+                map.add(new Room("a Troll's Room", "a dank room that smells of troll",
                                         Direction.NOEXIT,
                                         Direction.SOUTH,
                                         Direction.EAST,
-                                        Direction.NOEXIT));
-                map.add(new Room("Cave", " a dismal cave with walls covered in luminous moss",
+                                        Direction.NOEXIT,
+                                        trollList));
+                map.add(new Room("a Cave", "a dismal cave with walls covered in luminous moss",
                                         Direction.NORTH,
                                         Direction.NOEXIT,
                                         Direction.EAST,
-                                        Direction.NOEXIT));
-                map.add(new Room("Dungeon", " a nasty, dark cell",
+                                        Direction.NOEXIT,
+                                        caveList));
+                map.add(new Room("a Dungeon", "a nasty, dark cell",
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
                                         Direction.NOEXIT,
-                                        Direction.WEST));
+                                        Direction.WEST,
+                                        dungeonList));
 
 
                 // Build room exits by room in map
@@ -62,7 +78,11 @@ public class Game {
                 map.get(3).addExit(Direction.WEST, map.get(2));
 
 
-                player = new Player("Dave", " a loveable sort", map.get(0));
+                ThingList playerBag = new ThingList();
+                player = new Player("Dave", 
+                                " a loveable sort", 
+                                map.get(0), 
+                                playerBag);
 
         }
 
@@ -75,123 +95,199 @@ public class Game {
                 if(lowstr.equals("")){
                         s = "You must enter a command.";
                 } else {
-                        List<String> wl = wordList(lowstr);
-                        //wl.forEach( (astr) -> System.out.println(astr) );
-                        parseCommand(wl);
+                        List<String> wl = Parser.wordList(lowstr);
+                        // wl.forEach( (astr) -> System.out.println(astr) );
+                        s = getCommand( wl ); 
                 }
-                return s;
+                return "Status: " + s;
         }
 
-        private List<String> wordList(String input){
-                String delimiters = " \t,.:;?!\"'";
-                String token;
+        private String getCommand( List<String> wordlist  ){
+                String msg = "Something is not quite right.\n";
 
-                List<String> stringList = new ArrayList<>();
-                StringTokenizer tokenizer = new StringTokenizer(input, delimiters);
-                 while(tokenizer.hasMoreTokens()){
-                         token = tokenizer.nextToken();
-                         stringList.add(token);
-                 }
-                 return stringList;
+                cmd = Parser.parseCommand(wordlist);
+                if( cmd != null ){
+                        msg = processCommand( cmd );
+                }
+
+                return msg;
         }
 
-        private void parseCommand(List<String> wordlist){
-                String verb;
-                String noun;
-                
-                if(wordlist.size() > 2){
-                        System.out.println("Only 2 word commands allowed");
-                } else if( wordlist.size() == 1){
-                        verb = wordlist.get(0);
-                        if(!commands.contains(verb)){
-                                System.out.println(verb + " is not a know verb");
-                        } else {
-                                processMove(verb);
-                        }
-
-                } else {
-                        verb = wordlist.get(0);
-                        noun = wordlist.get(1);
-                        if(!commands.contains(verb)){
-                                System.out.println(verb + " is not a known verb");
-                        } else {
-                                processCommand(verb, noun);
-                        }
-                                         
-                }
-        
-
-       }
-
-       private void movePlayer(Player aPlayer, Direction dir){
+       private String movePlayer(Player aPlayer, Direction dir){
                 Room r = aPlayer.getLocation();
 
                switch(dir) {
-                        case Direction.NORTH:
+                        case Direction.NORTH -> {
                                 if(r.getNorth() == Direction.NORTH){
                                         if(r.exits.containsKey(Direction.NORTH)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
+                                } else {
+                                        return "Not an exit.";
                                 }
-                                break;
-                        case Direction.SOUTH:
+                        }
+                        case Direction.SOUTH -> {
                                 if(r.getSouth() == Direction.SOUTH){
                                         if(r.exits.containsKey(Direction.SOUTH)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
+                                } else {
+                                        return "Not an exit.";
                                 }
-                                break;
-                        case Direction.EAST:
+                        }
+                        case Direction.EAST -> {
                                 if(r.getEast() == Direction.EAST){
                                         if(r.exits.containsKey(Direction.EAST)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
-                                } 
-                                break;
-                        case Direction.WEST:
+                                } else {
+                                        return "Not an exit.";
+                                }
+                        }
+                        case Direction.WEST -> {
                                 if(r.getWest() == Direction.WEST){
                                         if(r.exits.containsKey(Direction.WEST)){
                                                 player.setLocation(r.exits.get(dir));
                                         }
+                                } else {
+                                        return "Not an exit.";
                                 }
-                                break;
-                        case Direction.NOEXIT:
-                                System.out.println("That direction is not an exit");
+                        }
+                        case Direction.UP -> { return "Not an exit"; }
+                        case Direction.DOWN -> { return "Not an exit"; }
+                        case Direction.NOEXIT -> { return "That direction is not an exit"; }
 
                 }
-                System.out.println("You are in the "+player.getLocation().getName());
+                return player.getLocation().describe();
 
        }
 
-       private void processCommand(String verb, String noun){
-                
+       private String processCommand(CmdObj command){
 
-       }
+               String msg = "Command failed\n";
 
-       private void processMove(String verb){
-
-               switch(verb){
-                       case "north":
-                       case "n":
-                               movePlayer(player, Direction.NORTH);
-                               break;
-                       case "south":
-                       case "s":
-                               movePlayer(player, Direction.SOUTH);
-                               break;
-                       case "east":
-                       case "e":
-                               movePlayer(player, Direction.EAST);
-                               break;
-                       case "west":
-                       case "w":
-                               movePlayer(player, Direction.WEST);
-                               break;
+               switch(command.verb( ) ){
+                        case "look"-> { msg = player.getLocation().describe(); }
+                        case "take"-> { msg = processPreposition( command ); }
+                        case "drop"-> { msg = player.dropObj( command, player.getBag( ) ); }    
+                        case "check" -> { msg = player.showInventory(); } 
+                        case "go" -> { msg = processMove( command ); } 
+                        case "save" -> { msg = saveGame( );   }
+                        case "load" -> { msg = loadGame(  );  } 
+                        case "give" -> { msg = hint(  ); } 
+                        case "open" -> { msg = player.openObject(command); }
+                        case "put" -> { msg = processPreposition( command ); }
+                        default-> msg = "I didn't understand that request.";
 
                }
+               return msg;
+
+       }
+      
+       private String processPreposition( CmdObj command ){
+               String msg = "";
+
+               switch( command.preposition( ) ){
+                        case "from" -> { 
+                                if( !command.noun2( ).isBlank( ) && player.isThingHere( command.noun2( ) ) ){
+                                        Thing thing = player.getLocation( ).getThings( ).thisObj( command.noun2( ) );
+                                        if( thing != null && thing instanceof ContainerThing ){
+                                                ContainerThing container = ( ContainerThing ) thing;
+                                                msg = player.takeObj( command, container.getThingList( ) ); 
+                                        }
+                                } else {
+                                        msg = "I'm not sure what you are asking to do.\n";
+                                }
+
+                        }
+                        case "in", "into" -> { 
+                                if( !command.noun2( ).isBlank( )  && player.isThingHere( command.noun2( ) ) ){
+                                        for( Thing thing : player.getLocation( ).getThings( ) ){
+                                                if( thing.getName( ).equals( command.noun2( ) ) ){
+                                                        ContainerThing container = ( ContainerThing ) thing;
+                                                        if( container.isOpen( ) ){ 
+                                                                msg = player.putObjInto( command, container.getThingList( ) );
+                                                        }
+                                                }
+                                        }
+
+                                } else {
+                                        msg = "I'm not sure what you wish me to do.\nAre you sure " + command.noun2( ) + " is open?\n";
+                                }          
+
+                        }
+                        default -> {
+
+                                msg =  player.takeObj( command, player.getLocation( ).getThings( ) ); 
+                        }
+               }
+               return msg;
+       }
+
+
+       private String processMove(CmdObj command ){
+               String msg = "something failed\n";
+
+               switch(command.noun1( ) ){
+                       case "north" -> { msg = movePlayer(player, Direction.NORTH); }
+                       case "south" -> { msg = movePlayer(player, Direction.SOUTH); }
+                       case "east" -> { msg = movePlayer(player, Direction.EAST); }
+                       case "west" -> { msg = movePlayer(player, Direction.WEST); }
+
+               }
+               return msg;
 
                
 
+       }
+
+       private String saveGame( ){
+               String msg = "Saving Game";
+
+               try {
+                       FileOutputStream fos = new FileOutputStream("./Adv.sav");
+                       ObjectOutputStream oos = new ObjectOutputStream(fos);
+                       oos.writeObject( this );
+                       oos.flush(  );
+                       oos.close(  );
+                       msg = "Game Saved";
+               } catch (Exception e) {
+                       msg = "Serialization error! Can't save data.\n"+
+                               e.getClass(  ) + ": " + e.getMessage(  ) + "\n";  
+               }
+
+                return msg;
+       }
+
+       private String loadGame(  ){
+               String msg = "Loading Game";
+
+
+               try {
+                       FileInputStream fis = new FileInputStream("./Adv.sav");
+                       ObjectInputStream ois = new ObjectInputStream( fis );
+                       Game loaded = ( Game ) ois.readObject(  );
+                       this.map = loaded.map;
+                       this.player = loaded.player;
+                       //this.commands = loaded.commands;
+                       ois.close(  );
+                       msg = "\n---Game Loaded---\n";
+               } catch (Exception e) {
+                       msg = "Serialization error! Can't load data.\n"+
+                               e.getClass(  ) + ": " + e.getMessage(  );  
+               }
+
+               return msg;
+       }
+
+       private String hint(  ){
+               StringBuilder msg = new StringBuilder( ); 
+
+               msg.append( "Try using go and a direction\nOr, try to look around\n" );
+               msg.append( "\nIf you are taking something out of something,\n" );
+               msg.append( "you might need to say what you are taking it from.\n" );
+
+               return msg.toString( );
        }
 
 

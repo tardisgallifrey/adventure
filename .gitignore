@@ -10,4 +10,7 @@ build
 # ignore bin folder
 bin
 
+# ignore saved game
+Adv.sav
+
 
