@@ -1,0 +1,73 @@
+name: Build Linux application image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build the application
+        run: ./gradlew clean build
+
+      - name: Create Linux app image
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf linux
+          mkdir -p linux/jpackage-input
+
+          # Find the versioned Gradle JAR and give it the requested name.
+          jar_file="$(find build/libs -maxdepth 1 -type f \
+            -name 'adventure-*.jar' \
+            ! -name '*-plain.jar' \
+            -print -quit)"
+
+          if [ -z "$jar_file" ]; then
+            echo "Could not find the built Adventure JAR in build/libs"
+            ls -la build/libs
+            exit 1
+          fi
+
+          cp "$jar_file" linux/jpackage-input/adventure.jar
+
+          # Include runtime dependencies required by the application.
+          ./gradlew installDist
+          cp build/install/adventure/lib/*.jar linux/jpackage-input/
+
+          jpackage \
+            --type app-image \
+            --name Adventure \
+            --dest linux \
+            --input linux/jpackage-input \
+            --main-jar adventure.jar \
+            --main-class com.tardisgallifrey.adventure.Main \
+            --linux-shortcut \
+            --linux-menu
+
+          rm -rf linux/jpackage-input
+
+      - name: Upload Linux app image
+        uses: actions/upload-artifact@v4
+        with:
+          name: adventure-linux
+          path: linux/Adventure/
+          if-no-files-found: error
