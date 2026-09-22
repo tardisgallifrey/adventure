@@ -61,7 +61,7 @@ jobs:
             --main-jar adventure.jar \
             --main-class com.tardisgallifrey.adventure.Main \
             --linux-shortcut \
-            --linux-menu
+            # --linux-menu
 
           rm -rf linux/jpackage-input
 
