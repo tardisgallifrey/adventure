@@ -37,7 +37,7 @@ jobs:
 
           # Find the versioned Gradle JAR and give it the requested name.
           jar_file="$(find build/libs -maxdepth 1 -type f \
-            -name 'adventure-*.jar' \
+            -name 'adventure*.jar' \
             ! -name '*-plain.jar' \
             -print -quit)"
 
