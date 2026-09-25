@@ -6,7 +6,7 @@ steps:
   - name: build
     image: debian
     commands:
-      - dnf install -y java-21-openjdk-devel
+      - apt install -y java-21-openjdk-devel
       - ./gradlew clean build --no-daemon
 
 
