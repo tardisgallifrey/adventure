@@ -13,6 +13,7 @@ steps:
       - |
         jpackage \
           --name "adventure" \
+          --app-image \
           --type rpm \
           --dest . \
           --main-jar build/libs/adventure.jar  \
