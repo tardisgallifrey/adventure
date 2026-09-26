@@ -8,3 +8,5 @@ steps:
     commands:
       - echo "Install openjdk-devel"
       - dnf install -y java-21-openjdk-devel
+      - dnf install -y rpm-build
+      - ./gradlew clean build
