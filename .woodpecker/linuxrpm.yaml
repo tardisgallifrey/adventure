@@ -13,11 +13,8 @@ steps:
       - |
         jpackage \
           --name "adventure" \
-          --app-image \
-          --type rpm \
-          --dest . \
-          --main-jar build/libs/adventure.jar  \
-          --main-class com.tardisgallifrey.adventure.Main \
+          --input build/libs/ \
+          --main-jar adventure.jar  \
           --app-version 0.8 \
           --linux-shortcut \
           --resource-dir resources
