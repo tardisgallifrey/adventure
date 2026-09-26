@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=adventure
+Exec=APPLICATION_LAUNCHER
+Icon=utilities-terminal
+Terminal=true
+Type=Application
+Categories=Game;

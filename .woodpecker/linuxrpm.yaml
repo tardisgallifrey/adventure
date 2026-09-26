@@ -10,3 +10,13 @@ steps:
       - dnf install -y java-21-openjdk-devel
       - dnf install -y rpm-build
       - ./gradlew clean build
+      - |
+        jpackage \
+          --name "adventure" \
+          --type rpm \
+          --det . \
+          --main-jar build/libs/adventure.jar  \
+          --main-class com.tardisgallifrey.adventure.Main \
+          --app-version 0.8 \
+          --linux-shortcut \
+          --resource-dir resources
