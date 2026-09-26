@@ -1,12 +1,17 @@
 when:
-  event: push
-  branch: main
+  - event: push
+    branch: main
 
 steps:
-  - name: build-rpm
-  # Using Fedora since it has robust, modern RPM tools natively available
-image: debian
-commands:
-  #1. Install Java Development Kit and the RPM build utilities
+  - name: build
+    image: debian
+    commands:
+      - echo "This is the build step"
+      - echo "some-data" > some-file.txt
+  - name: a-test-step
+    image: alpine
+    commands:
+      - echo "Testing ..."
+      - cat some-file.txt
 
 
