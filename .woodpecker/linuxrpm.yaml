@@ -5,9 +5,8 @@ when:
 steps:
   - name: build-rpm
   # Using Fedora since it has robust, modern RPM tools natively available
-image: fedora
+image: debian
 commands:
   #1. Install Java Development Kit and the RPM build utilities
-  - dnf install -y java-21-openjdk-devel 
 
 
