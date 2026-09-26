@@ -23,7 +23,10 @@ jobs:
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
-        run: mkdir ./linux
+
+      - name: make linux package folder
+        shell: bash
+        run: mkdir linux
 
       - name: Build the application
         run: ./gradlew clean build
