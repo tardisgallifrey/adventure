@@ -14,7 +14,7 @@ steps:
         jpackage \
           --name "adventure" \
           --type rpm \
-          --det . \
+          --dest . \
           --main-jar build/libs/adventure.jar  \
           --main-class com.tardisgallifrey.adventure.Main \
           --app-version 0.8 \
