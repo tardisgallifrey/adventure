@@ -32,5 +32,5 @@ steps:
       # Configure authentication using the secret token
       - git remote set-url origin https://$CODEBERG_TOKEN@codeberg.org/$CI_REPO.git
       - git add linux/
-      - git commit -m "build: add generated rpm package [skip ci]" || echo "No changes to commit"
+      - git commit -m "build add generated rpm package [skip ci]" || echo "No changes to commit"
       - git push origin $CI_COMMIT_BRANCH
