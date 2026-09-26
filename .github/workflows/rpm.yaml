@@ -1,20 +1,45 @@
-when:
-  - event: push
-    branch: main
+name: Build Linux application image
 
-steps:
-  - name: build
-    image: fedora:40
-    commands:
-      - echo "Install openjdk-devel"
-      - dnf install -y java-21-openjdk-devel
-      - dnf install -y rpm-build
-      - ./gradlew clean build
-      - |
-        jpackage \
-          --name "adventure" \
-          --input build/libs/ \
-          --main-jar adventure.jar  \
-          --app-version 0.8 \
-          --linux-shortcut \
-          --resource-dir resources
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build the application
+        run: ./gradlew clean build
+
+      - name: Create Linux app image
+        shell: bash
+        run: |
+          set -euo pipefail
+          jpackage \
+            --name "adventure" \
+            --input build/libs/ \
+            --main-jar adventure.jar  \
+            --app-version 0.8 \
+            --linux-shortcut \
+            --resource-dir resources
+
+
+
+
+
