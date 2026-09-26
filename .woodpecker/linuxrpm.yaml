@@ -1,0 +1,16 @@
+when:
+  event: push
+  branch: main
+
+steps:
+  - name: build-rpm
+  # Using Fedora since it has robust, modern RPM tools natively available
+image: fedora:40
+commands:
+  #1. Install Java Development Kit and the RPM build utilities
+  - dnf install -y java-21-openjdk-devel rpm-build
+
+  #2. Build the JAR with gradle
+  - ./gradlew clean build --no-deamon
+
+
