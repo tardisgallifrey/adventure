@@ -8,13 +8,29 @@ steps:
     commands:
       - echo "Install openjdk-devel"
       - dnf install -y java-21-openjdk-devel
+      - dnf install -y java-21-openjdk-jmods
+      - dnf install -y fakeroot
+      - dnf install -y git
       - dnf install -y rpm-build
       - ./gradlew clean build
       - |
         jpackage \
           --name "adventure" \
+          --dest linux \
           --input build/libs/ \
           --main-jar adventure.jar  \
           --app-version 0.8 \
+          --add-modules java.rmi \
           --linux-shortcut \
           --resource-dir resources
+  - name: commit-and-push
+    image: alpine/git
+    secrets: [ CODEBERG_TOKEN ]
+    commands:
+      - git config user.name "woodpecker-bot"
+      - git config user.email "woodpecker@noreply.codeberg.org"
+      # Configure authentication using the secret token
+      - git remote set-url origin https://oauth2:${$CODEBERG_TOKEN}@codeberg.org/$CI_REPO.git
+      - git add linux/
+      - git commit -m "build add generated rpm package [skip ci]" || echo "No changes to commit"
+      - git push origin $CI_COMMIT_BRANCH

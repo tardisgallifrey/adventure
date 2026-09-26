@@ -1,4 +1,8 @@
+
+##### Codeberg CI status
 [![status-badge](https://ci.codeberg.org/api/badges/18053/status.svg)](https://ci.codeberg.org/repos/18053)
+##### Github CI status
+[![Build Linux application image](https://github.com/tardisgallifrey/adventure/actions/workflows/rpm.yaml/badge.svg)](https://github.com/tardisgallifrey/adventure/actions/workflows/rpm.yaml)
 
 # A Java text Adventure Game -- V0.8
 
