@@ -1,0 +1,20 @@
+when:
+  - event: push
+    branch: main
+
+steps:
+  - name: build
+    image: fedora:40
+    commands:
+      - echo "Install openjdk-devel"
+      - dnf install -y java-21-openjdk-devel
+      - dnf install -y rpm-build
+      - ./gradlew clean build
+      - |
+        jpackage \
+          --name "adventure" \
+          --input build/libs/ \
+          --main-jar adventure.jar  \
+          --app-version 0.8 \
+          --linux-shortcut \
+          --resource-dir resources
