@@ -7,8 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-rpm:
+  build-deb:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # can write to repo
 
     steps:
       - name: Check out repository
@@ -24,10 +27,6 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: make linux package folder
-        shell: bash
-        run: mkdir linux
-
       - name: Build the application
         run: ./gradlew clean build
 
@@ -37,11 +36,20 @@ jobs:
           set -euo pipefail
           jpackage \
             --name "adventure" \
+            --dest linux \
             --input build/libs/ \
             --main-jar adventure.jar  \
             --app-version 0.8 \
             --linux-shortcut \
             --resource-dir resources
+
+      - name: Commit and push .deb to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add linux/
+          git commit -m "build: add generated package [skip ci]" || echo "No changes to commit"
+          git push
 
 
 
