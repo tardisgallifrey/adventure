@@ -7,4 +7,4 @@ steps:
     image: fedora:40
     commands:
       - echo "Install openjdk-devel"
-
+      - dnf install -y java-21-openjdk-devel
