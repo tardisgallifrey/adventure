@@ -4,8 +4,7 @@ when:
 
 steps:
   - name: build
-    image: fedora
+    image: fedora:40
     commands:
-      - echo "This is the build step"
-      - echo "some-data" > some-file.txt
+      - echo "Install openjdk-devel"
 
