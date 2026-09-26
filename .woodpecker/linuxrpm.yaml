@@ -8,7 +8,7 @@ steps:
 image: fedora:40
 commands:
   #1. Install Java Development Kit and the RPM build utilities
-  - dnf install -y java-21-openjdk-devel rpm-build
+  - dnf install -y java-21-openjdk-devel 
 
   #2. Build the JAR with gradle
   - ./gradlew clean build --no-deamon
