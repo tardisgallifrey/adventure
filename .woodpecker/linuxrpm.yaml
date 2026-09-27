@@ -16,7 +16,7 @@ steps:
       - |
         jpackage \
           --name "adventure" \
-          --dest linux \
+          --dest output \
           --input build/libs/ \
           --main-jar adventure.jar  \
           --app-version 0.8 \
