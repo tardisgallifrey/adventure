@@ -1,6 +1,6 @@
 when:
-  - event: push
-    branch: main
+  - event: tag
+    # branch: main
 
 steps:
   - name: build
@@ -23,14 +23,13 @@ steps:
           --add-modules java.rmi \
           --linux-shortcut \
           --resource-dir resources
-  - name: commit-and-push
-    image: alpine/git
-    secrets: [ CODEBERG_TOKEN ]
-    commands:
-      - git config user.name "woodpecker-bot"
-      - git config user.email "woodpecker@noreply.codeberg.org"
-      # Configure authentication using the secret token
-      - git remote set-url origin https://oauth2:${CODEBERG_TOKEN}@codeberg.org/$CI_REPO.git
-      - git add linux/
-      - git commit -m "build add generated rpm package [skip ci]" || echo "No changes to commit"
-      - git push origin $CI_COMMIT_BRANCH
+
+  - name: release-rpm
+    image: plugins/gitea-release
+    settings:
+      base_url: https://codeberg.org
+      api_key:
+        from_secret: codeberg_token
+      files:
+        - output/*.rpm
+
