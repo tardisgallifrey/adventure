@@ -16,7 +16,6 @@ steps:
       - |
         jpackage \
           --name "adventure" \
-          --dest output \
           --input build/libs/ \
           --main-jar adventure.jar  \
           --app-version 0.8 \
@@ -31,5 +30,5 @@ steps:
       api_key:
         from_secret: codeberg_token
       files:
-        - output/*.rpm
+        - *.rpm
 
