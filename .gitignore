@@ -13,4 +13,8 @@ bin
 # ignore saved game
 Adv.sav
 
+#ignore action file
+woodecker.txt
+
+
 
