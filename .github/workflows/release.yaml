@@ -31,9 +31,7 @@ jobs:
 
       - name: Verify and Prepare JAR Location
         run: |
-          if [ -f "adventure.jar" ]; then
-            echo "Found JAR in root!"
-          elif [ -f "build/libs/adventure.jar" ]; then
+          if [ -f "build/libs/adventure.jar" ]; then
             cp build/libs/adventure.jar ./adventure.jar
           else
             echo "Error: adventure.jar not found!"
@@ -43,19 +41,19 @@ jobs:
       - name: Create Windows Launcher Package
         run: |
           # 1. Create a dedicated directory for the Windows bundle
-          mkdir windows-dist
-          cp adventure.jar windows-dist/
+          mkdir adventure-play
+          cp adventure.jar adventure-play/
           
           # 2. Programmatically generate the .bat launcher script inside the folder
           # '@echo off' keeps the script looking clean
           # 'java -jar' launches the game in a console window
           # 'pause' keeps the window open if the game closes or crashes so they see errors
-          echo "@echo off" > windows-dist/run-game.bat
-          echo "java -jar adventure.jar" >> windows-dist/run-game.bat
-          echo "pause" >> windows-dist/run-game.bat
+          echo "@echo off" > adventure-play/run-game.bat
+          echo "java -jar adventure.jar" >> adventure-play/run-game.bat
+          echo "pause" >> adventure-play/run-game.bat
           
           # 3. Zip the folder up so it's a single download
-          zip -r windows-adventure.zip windows-dist/
+          zip -r windows-adventure.zip adventure-play/
 
       - name: Create GitHub Release
         env:
@@ -64,4 +62,4 @@ jobs:
           # This uploads BOTH the standalone JAR and the specialized Windows zip bundle
           gh release create ${{ github.ref_name }} ./adventure.jar ./windows-adventure.zip \
             --title "Release ${{ github.ref_name }}" \
-            --notes "Automated release of Adventure game. Windows players should download windows-adventure.zip."
+            --notes "Automated release of Adventure game. Windows players should download windows-adventure.zip. Then ublock the zip."
