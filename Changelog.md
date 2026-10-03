@@ -42,8 +42,14 @@
     -- finished processPreposition method of Game
     -- modifed describe method of Room to alway show open containers
     -- modified README.md
+<<<<<<< HEAD
 9/22/26
     -- working on github workflow actions
+=======
+10/03/26
+    -- Github, released windows zip with bat file
+    -- Codeberg, released rpm and deb app-image
+>>>>>>> 9371384 (First linux release of Adventure 10/3/26)
 
 
 
