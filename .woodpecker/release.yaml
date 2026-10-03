@@ -2,7 +2,7 @@ steps:
   - name: publish-release
     image: codeberg.org/woodpecker-plugins/release
     settings:
-      base_url: https://codeberg.org
+      repo: codeberg.org/tardisgallifrey/adventure
       api_key:
         from_secret: codeberg_token 
       files:
@@ -13,4 +13,4 @@ steps:
       target: main
     when:
       event: tag
-      ref: refs/tags/v*
+      branch: ${CI_REPO_DEFAULT_BRANCH} 
