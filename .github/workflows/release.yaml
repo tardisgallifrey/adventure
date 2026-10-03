@@ -41,7 +41,7 @@ jobs:
       - name: Create Windows Launcher Package
         run: |
           # 1. Create a dedicated directory for the Windows bundle
-          mkdir windows-dist
+          mkdir adventure-play
           cp adventure.jar adventure-play/
           
           # 2. Programmatically generate the .bat launcher script inside the folder
@@ -53,7 +53,7 @@ jobs:
           echo "pause" >> adventure-play/run-game.bat
           
           # 3. Zip the folder up so it's a single download
-          zip -r windows-adventure.zip windows-dist/
+          zip -r windows-adventure.zip adventure-play/
 
       - name: Create GitHub Release
         env:
