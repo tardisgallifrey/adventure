@@ -1,7 +1,3 @@
-when:
-  -event: tag
-  branch: main
-
 steps:
   - name: publish-release
     image: codeberg.org/woodpecker-plugins/release
@@ -15,3 +11,6 @@ steps:
       note: Changelog.md
       title: "${CI_COMMIT_TAG}"
       target: main
+  when:
+    event: tag
+    ref: refs/tags/v*
