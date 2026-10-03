@@ -10,7 +10,6 @@ steps:
         - "output/*.rpm"
       note: Changelog.md
       title: "${CI_COMMIT_TAG}"
-      target: main
     when:
       event: tag
       ref: refs/tags/v*
