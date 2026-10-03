@@ -69,6 +69,7 @@ tasks.named<Jar>("jar"){
     finalizedBy( "copyJarToRoot" ) 
 }
 
+
 abstract class CopyJarToRoot : DefaultTask( ) {
 
         @get:InputFile
@@ -93,6 +94,18 @@ tasks.register<CopyJarToRoot>( "copyJarToRoot" ){
                  destination.set( layout.projectDirectory.file( "adventure.jar" ) ) 
 }
 
+tasks.register<Exec>( "package" ){
+        val rpm = file( "rpmpackage" )
+        val deb = file( "debpackage" ) 
+
+        onlyIf{ rpm.exists( ) && deb.exists( )  }
+
+        workingDir( rpm.parentFile )
+        commandLine( "bash", rpm.name )
+
+        workingDir( deb.parentFile )
+        commandLine( "bash", deb.name ) 
+}
 
 dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.25.2")

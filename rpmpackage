@@ -1,0 +1,34 @@
+
+#!/usr/bin/env bash
+set -e
+
+# 1. Define variables for your project
+APP_NAME="adventure"
+VERSION="0.8"
+MAIN_JAR="adventure.jar"
+INPUT_DIR="build/libs" # The local folder containing your JARs
+
+echo "🚀 Starting jpackage process inside Red Hat/AlmaLinux Docker..."
+
+# 2. Run the UBI9-based Eclipse Temurin image
+docker run --rm \
+  -v "$(pwd)":/workspace \
+  -w /workspace \
+  eclipse-temurin:21-jdk-ubi9-minimal \
+  bash -c "
+    echo '📦 Installing native RPM packaging utilities...' && \
+    
+    # Red Hat package managers respect standard non-interactive flags out of the box
+    microdnf install -y rpm-build > /dev/null && \
+    \
+    echo '🔨 Running jpackage...' && \
+    jpackage \
+      --type rpm \
+      --name '$APP_NAME' \
+      --app-version '$VERSION' \
+      --input '$INPUT_DIR' \
+      --main-jar '$MAIN_JAR' \
+      --dest output
+  "
+
+echo "✅ Done! Your .rpm package should be in the local 'output/' directory."
