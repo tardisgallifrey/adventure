@@ -1,0 +1,29 @@
+
+name: Build and release rpm
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: almalinux:9
+      options: --user root
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install JDK 21
+        run: |
+          microdnf install -y java-17-openjdk-devel
+          microdnf install -y rpm-build
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build JAR with Gradle
+        run: ./gradlew clean build
