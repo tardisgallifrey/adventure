@@ -1,0 +1,52 @@
+
+name: Game release linux deb 
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04 
+      options: --user root
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install JDK 21
+        run: |
+          apt-get update
+          apt-get install -y openjdk-21-jdk
+          apt-get install -y fakeroot
+          apt-get install -y debhelper
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build JAR with Gradle
+        run: ./gradlew clean build
+
+      - name: Package RPM with jpackage
+        run: |
+          jpackage \
+            --type deb \
+            --dest output/ \
+            --name adventure \
+            --input build/libs/ \
+            --main-jar adventure.jar \
+            --linux-shortcut \
+            --resource-dir resources/
+
+      - name: Create Github release and Upload RPM
+        uses: softprops/action-gh-release@v2
+        with: 
+          files: output/*.deb
+
+
