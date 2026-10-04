@@ -19,6 +19,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Parse Version Tag
+        id: versioning
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#v}
+          echo "APP_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Install JDK 21
         run: |

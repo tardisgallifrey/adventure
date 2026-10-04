@@ -44,6 +44,9 @@
     -- Github, released windows zip with bat file
 10/04/26
     -- Changed to github repo only.  Codeberg does not work for releases.
+    -- Pushed releases for .rpm, .deb, and Windows zip
+    -- updated README and removed unnecessary files
+
 
 
 

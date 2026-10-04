@@ -1,5 +1,5 @@
 
-name: Create Game Release
+name: Windows Game Release
 
 on:
   push:
@@ -16,6 +16,13 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
+
+      - name: Parse Version Tag
+        id: versioning
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#v}
+          echo "APP_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
