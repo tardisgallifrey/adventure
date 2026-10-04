@@ -20,6 +20,7 @@ jobs:
       - name: Install JDK 21
         run: |
           dnf install -y java-21-openjdk-devel
+          dnf install -y java-21-openjdk-jmods
           dnf install -y rpm-build
 
       - name: Setup Gradle
