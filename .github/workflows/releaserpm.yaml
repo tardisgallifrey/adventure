@@ -6,6 +6,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,4 +42,9 @@ jobs:
             --main-jar adventure.jar \
             --linux-shortcut \
             --resource-dir resources/
+
+      - name: Create Github release and Upload RPM
+        uses: softprops/action-gh-release@v2
+        with: 
+          files: output/*.rpm
 
