@@ -19,8 +19,8 @@ jobs:
 
       - name: Install JDK 21
         run: |
-          microdnf install -y java-17-openjdk-devel
-          microdnf install -y rpm-build
+          dnf install -y java-17-openjdk-devel
+          dnf install -y rpm-build
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
