@@ -1,3 +1,8 @@
+[![Adventure Release - Windows status](https://github.com/tardisgallifrey/adventure/actions/workflows/release.yaml/badge.svg)](https://github.com/tardisgallifrey/adventure/actions/workflows/release.yaml)
+
+[![Adventure Release - Linux DEB](https://github.com/tardisgallifrey/adventure/actions/workflows/releasedeb.yaml/badge.svg)](https://github.com/tardisgallifrey/adventure/actions/workflows/releasedeb.yaml)
+
+[![Adventure Release - Linux RPM](https://github.com/tardisgallifrey/adventure/actions/workflows/releaserpm.yaml/badge.svg)](https://github.com/tardisgallifrey/adventure/actions/workflows/releaserpm.yaml)
 
 # A Java text Adventure Game -- V0.8
 
@@ -14,6 +19,8 @@ Completed simple hint feature.
 Completed take, move, features.
 
 Finished book, major architecture change ongoing.
+
+For **Installation and Game Play** help see the **TLDR** entry below.
 
 ##  Update for August 2026 
 
@@ -47,9 +54,33 @@ I have finished the work to take things from a container or put things into a co
 
 I am working on setting up CI with Codeberg so that I can produce an *msi* and *app-image* output for the game.  Microsoft has struck again and it is extremely difficult to download the jar file to Windows.
 
+I spent several recent weekends working on just the packaging, versioning, and releasing of the game.  I had originally begun this work on [Codeberg]( https://codeberg.org/tardisgallifrey ), but have become convinced that either I have no idea how WoodPecker CI works or that WoodPecker CI does not work.  So, I am back here on Github and things are now working.  
+
+I have decided upon how to complete the game engine before actual game construction.  I will use what the author set up for chests, sacks, and other containers.  It is a `ContainerThing` class.  I plan to extend this class into a new class that will have a limited number of slots, and some methodology to ensure that only certain identified `Thing`'s will go in order into the container.  In the `Game` class, completion of this special container class with all of its required items will determing game completion.
+
 ### TLDR, I want to play the game
 
-You may download just the `jar` file to play if you don't wish to use the rest of the game.  The file is `adventure.jar` in the root folder above.  It will play on Linux or Windows with `java -jar adventure.jar`.  There are only four rooms and a limited number of items at the moment.  You can open the chest, remove items, or put items in the chest.  Beware of forgetting to tell where to put items *in* or *into*.  Please add an issue if you find a problem.  I welcome any bug fixes.  Sorry, feature adds right now will be ignored until I reach V1.0. 
+##### To Install on Windows as a Zip file
+
+Click on the **Releases** link for the latest release.  There will be a link there in Releases to download `windows-adventure.zip`.  It will download into your Downloads folder.  Extract the folder in the zip and place it wherever you like in your Windows file system.  Open the `adventure` folder and double clik `run-game.bat`.  It should launch a `cmd` window and begin the game.
+
+##### To Install on Linux with a .deb file
+
+Download the `.deb` package and run `sudo apt-get install adventure-X.X.amd64.deb`.  You should be able to search your menus for `adventure` and start the game.
+
+##### To Install on Linux with a .rpm file
+
+Download the `.rpm` package and run `sudo dnf install adventure-X.X.x86_64.rpm`.  You should be able to search your menus for `adventure` and start the game.
+
+##### Run the adventure.jar 
+
+You may also download the `jar` file directly to your Linux or Windows file system and run `java -jar adventure.jar`.  You do need Java 21 installed at minimum.
+
+##### Game Play
+
+The game prompt is waiting for you to enter commands.  Most commands will require a verb and a noun.  Things such as `look around`, `go north`, `take object`, or `drop object` will work.  You may also `check inventory` to see what you have.  However, when you encounter chests, sacks, or similar, you will need to `open object` or sometimes `close object`.  Finally, if you want to take something out of a container, you will need a verb, object, preposition, and the object of the preposition.  So,  you might have to say, `take sword out of container` or `put something into container`; maybe even `take something from container`.  The only single word commands right now are `save` and `load`; which will save the game and load a saved game. 
+
+There are only four rooms and a limited number of items at the moment.  You can open the chest, remove items, or put items in the chest.  Beware of forgetting to tell where to put items *in* or *into*.  Please add an issue if you find a problem.  I welcome any bug fixes.  Sorry, feature adds right now will be ignored until I reach V1.0. 
 
 ### Some game commands
 
