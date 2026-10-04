@@ -1,13 +1,10 @@
 7/11/26
     -- changed ThingList, Treasure, Thing, and Game to begin getting ready for taking and dropping items.
-
 7/12/26
     -- finished takeObj and dropObj.  Wrote transferObj.  Fixed architecture to ensure that all methods produce messages that return up the logic tree so that the Main method owns all message output.  
-
 7/19/26
     -- added inventory feature to game and filled out showInventory() player method
     -- refactored runCommand(), processMove(), and processCommand() to allow for smoother command lookups and more flexible wording for player.
-
 8/3/26
     -- added save and load features.
     -- added simple hint
@@ -42,14 +39,11 @@
     -- finished processPreposition method of Game
     -- modifed describe method of Room to alway show open containers
     -- modified README.md
-<<<<<<< HEAD
-9/22/26
     -- working on github workflow actions
-=======
 10/03/26
     -- Github, released windows zip with bat file
-    -- Codeberg, released rpm and deb app-image
->>>>>>> 9371384 (First linux release of Adventure 10/3/26)
+10/04/26
+    -- Changed to github repo only.  Codeberg does not work for releases.
 
 
 
