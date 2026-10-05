@@ -45,6 +45,7 @@ jobs:
           jpackage \
             --type deb \
             --dest output/ \
+            --app-version "${{ env.APP_VERSION }}" \
             --name adventure \
             --input build/libs/ \
             --main-jar adventure.jar \

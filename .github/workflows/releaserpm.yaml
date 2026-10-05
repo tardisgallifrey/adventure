@@ -44,6 +44,7 @@ jobs:
           jpackage \
             --type rpm \
             --dest output/ \
+            --app-version "${{ env.APP_VERSION }}" \
             --name adventure \
             --input build/libs/ \
             --main-jar adventure.jar \
