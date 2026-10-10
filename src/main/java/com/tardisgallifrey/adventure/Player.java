@@ -70,6 +70,27 @@ public class Player extends Thing {
                 return false;
         }
 
+        public String closeObject( CmdObj command ){
+               String retStr = "";
+               Thing t = this.getLocation().getThings().thisObj( command.noun1( ) );
+
+               if( t instanceof ContainerThing ){
+                        ContainerThing container = ( ContainerThing ) t;
+                        if( container.isOpenable( )  ){
+                                container.close( );
+                                retStr = "You closed the " + container.getName( ) + ".\n";
+                                System.out.println( container.showInventory() );
+                        } else {
+                                retStr = "You didn't close the " + container.getName( ) + ".\n";
+                        }
+               } else {
+                       retStr = t.getName( ) + " is not able to be closed.\n";
+               }
+
+                return retStr;
+       }
+
+
        public String openObject( CmdObj command ){
                String retStr = "";
                Thing t = this.getLocation().getThings().thisObj( command.noun1( ) );

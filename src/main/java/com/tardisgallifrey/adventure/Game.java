@@ -177,6 +177,7 @@ public class Game implements Serializable{
                         case "give" -> { msg = hint(  ); } 
                         case "open" -> { msg = player.openObject(command); }
                         case "put" -> { msg = processPreposition( command ); }
+                        case "close" -> { msg = player.closeObject( command ); } 
                         default-> msg = "I didn't understand that request.";
 
                }

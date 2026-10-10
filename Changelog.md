@@ -46,6 +46,11 @@
     -- Changed to github repo only.  Codeberg does not work for releases.
     -- Pushed releases for .rpm, .deb, and Windows zip
     -- updated README and removed unnecessary files
+10/10/26
+    -- added closeObject( ) method, test, and action in Game.
+    -- began construction of ContainerAltar class
+    -- added tests to validate ContainerAltar constructor
+      
 
 
 

@@ -58,6 +58,8 @@ I spent several recent weekends working on just the packaging, versioning, and r
 
 I have decided upon how to complete the game engine before actual game construction.  I will use what the author set up for chests, sacks, and other containers.  It is a `ContainerThing` class.  I plan to extend this class into a new class that will have a limited number of slots, and some methodology to ensure that only certain identified `Thing`'s will go in order into the container.  In the `Game` class, completion of this special container class with all of its required items will determing game completion.
 
+I have added a  `closeObject` method to close containers.
+
 ### TLDR, I want to play the game
 
 ##### To Install on Windows as a Zip file

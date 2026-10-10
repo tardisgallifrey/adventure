@@ -185,4 +185,120 @@ public class AdventureTests{
 
         }
 
+        @Test
+        void testCloseContainer( ){
+                CmdObj command = new CmdObj("", "chest", "", "", "");
+                ThingList inventory = new ThingList( );
+                inventory.add( new Thing("carrot", "a tasty carrot", true, true) );
+                inventory.add( new Thing( "shirt", "a nice satin shirt", true, true) );
+                inventory.add( new Treasure( "ruby", "a large red ruby", 400) );
+
+                ThingList chest_inventory = new ThingList(  );
+                chest_inventory.add( new Thing( "key", " it opens something", true, true) );
+                chest_inventory.add( new Thing( "jacket", " a warm leather jacket", true, true ) ); 
+                ContainerThing chestWood = new ContainerThing( "chest", " a wooden chest", chest_inventory, false, false, true, false);
+
+                ThingList room = new ThingList( );
+                room.add( new Thing( "sword", "a sharp sword", true, true ) );
+                room.add( new Treasure( "diamond", "shiny", 1000 ) );
+                room.add( chestWood ); 
+
+                
+                Room aRoom = new Room("Hall", "a long hall", 
+                                Direction.NOEXIT, 
+                                Direction.NOEXIT, 
+                                Direction.NOEXIT, 
+                                Direction.NOEXIT,
+                                room );
+
+                Player newPlayer = new Player("Bob", "a pleasant sort", aRoom, inventory);
+
+                newPlayer.openObject( command );
+                assertTrue( newPlayer.isThingHere( "key" ) );
+                newPlayer.closeObject( command );
+                assertFalse( newPlayer.isThingHere( "key" ) ); 
+
+
+        }
+
+
+        @Test
+        void constructorThrowsWhenEmptyListIsNotEmpty( ){
+
+                ThingList emptyList = new ThingList( );
+                ThingList winList = new ThingList( );
+
+                emptyList.add( new Thing("sword", "a sharp sword", true, true) );
+
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing( "ruby", "a red ruby", true, true ) );
+
+
+                //  This expects the constructor to throw the Exception
+                assertThrows( IllegalArgumentException.class, ( ) -> {
+                                new ContainerAltar( "Altar", "an ancient altar", emptyList, winList, 2 );
+                                }); 
+        }
+
+        @Test
+        void constructorThrowsWhenWinningListIsTooSmall( ){
+
+                ThingList emptyList = new ThingList( );
+                ThingList winList = new ThingList( );
+
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+
+
+                //  This expects the constructor to throw the Exception
+                assertThrows( IllegalArgumentException.class, ( ) -> {
+                                new ContainerAltar( "Altar", "an ancient altar", emptyList, winList, 2 );
+                                }); 
+        }
+
+        @Test
+        void constructorThrowsWhenWinningListIsTooLarge( ){
+
+                ThingList emptyList = new ThingList( );
+                ThingList winList = new ThingList( );
+
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+
+
+                //  This expects the constructor to throw the Exception
+                assertThrows( IllegalArgumentException.class, ( ) -> {
+                                new ContainerAltar( "Altar", "an ancient altar", emptyList, winList, 2 );
+                                }); 
+        }
+
+        @Test
+        void constructorSucceedsWithWinListAtTwo( ){
+
+                ThingList emptyList = new ThingList( );
+                ThingList winList = new ThingList( );
+
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing("diamond", "a shiny diamond", true, true) );
+
+                ContainerAltar altar = new ContainerAltar( "Altar", "an ancient altar", emptyList, winList, 2 ); 
+
+                assertEquals( "Altar", altar.getName( ) ); 
+                assertEquals( "diamond", altar.getWinList( ).get( 0 ).getName( ) ); 
+
+        }
+
+
+
+
+
 }

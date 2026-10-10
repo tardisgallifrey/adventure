@@ -1,8 +1,7 @@
 package com.tardisgallifrey.adventure;
 
-import java.io.Serializable;
 
-public class ContainerThing extends ThingHolder implements Serializable {
+public class ContainerThing extends ThingHolder {
 
         private boolean openable;
         private boolean isopen;
