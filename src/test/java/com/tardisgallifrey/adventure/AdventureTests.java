@@ -297,6 +297,30 @@ public class AdventureTests{
 
         }
 
+        @Test
+        void addTooManyObjectsToAltar( ){
+                ThingList emptyList = new ThingList( );
+                ThingList winList = new ThingList( );
+                int requiredSize = 3;
+
+                winList.add( new Thing( "diamond", "a shiny diamond", true, true) );
+                winList.add( new Thing( "ruby", "a large red ruby", true, true )  );
+
+                ContainerAltar altar = new ContainerAltar("altar", "an ancient altar",
+                                emptyList, winList, requiredSize);
+
+                 
+                assertEquals( 0, altar.getThingList( ).size( ) );
+                altar.addAltarItem(new Thing( "sword", "sharp sword", true, true ) );
+                assertEquals( 1, altar.getThingList( ).size( ) );
+                altar.addAltarItem( new Thing( "jacket", "leather", true, true ) );
+                assertEquals( 2, altar.getThingList( ).size( ) );
+                altar.addAltarItem( new Thing( "arrows", "a quiver", true, true ) ); 
+                assertEquals( 3, altar.getThingList( ).size( ) ); 
+                altar.addAltarItem( new Thing( "axe", "hefty axe", true, true ) );
+                assertEquals( 4, altar.getThingList( ).size( ) ); 
+        }
+
 
 
 
