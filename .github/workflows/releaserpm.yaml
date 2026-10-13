@@ -25,6 +25,7 @@ jobs:
         run: |
           TAG="${{ github.ref_name }}"
           VERSION="${TAG#v}"
+          VERSION="${VERSION%%-*}"
           echo "APP_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Install JDK 21
