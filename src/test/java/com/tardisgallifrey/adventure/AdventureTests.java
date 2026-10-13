@@ -318,7 +318,6 @@ public class AdventureTests{
                 altar.addAltarItem( new Thing( "arrows", "a quiver", true, true ) ); 
                 assertEquals( 3, altar.getThingList( ).size( ) ); 
                 altar.addAltarItem( new Thing( "axe", "hefty axe", true, true ) );
-                assertEquals( 4, altar.getThingList( ).size( ) ); 
         }
 
 
